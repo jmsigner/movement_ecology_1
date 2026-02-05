@@ -1,0 +1,28 @@
+---
+title: "Introduction to Movement Ecology with R"
+output: github_document
+---
+  
+  This course provides an introduction to the analysis of animal movement data using R. Participants will learn how to read and process animal movement datasets, identify and handle outliers, and calculate fundamental movement metrics such as step lengths, directions, and net squared displacement. The course also covers home-range analyses and concludes with an introduction to describing movement patterns using statistical distributions.
+
+
+# Schedule
+
+## Day 1
+1. Introduction to movement data (GPS; J)	
+2. Introduction to movement data (Argos, Acoustic; B)	
+3. Characterizing movement data with steps and turns (J)
+4. Movement as RW and CRW	 (B)
+
+## Day 2
+5. Detecting and handling outliers	(B)
+6. Home ranges concepts and tools and akde	(B)
+7. Handling multiple animals (J)
+
+## Day 3
+8. Working with home ranges (J)
+9. Using statistical distribution to describe movement	(J)
+10.	Outlook: RSA (J), SSA (B), HMMs (J), Migration Mapping (B)	
+11. Q&A & own Data
+
+
