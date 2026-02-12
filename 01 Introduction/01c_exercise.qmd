@@ -1,0 +1,98 @@
+---
+title: "Exercise 1"
+author:
+  - name: Johannes Signer
+    orcid: 0000-0002-1771-7775
+    email: jmsigner@gmail.com
+date: last-modified
+format: html
+---
+
+## Exercise
+### Background
+
+The aim of this exercise is to understand the effect of ignoring bursts. Remember a burst has equal the same time between observations. For example, if we aim to have a GPS position every one hour, then one burst lasts until there is a time diffrence of > 1 hour between two GPS fixes. 
+
+### Data
+
+Use again the fisher data set and data for Leroy.
+
+### Task
+Compute the step lengths of the first steps of bursts and the last steps of bursts. And test, if their means are different.
+
+### Hints
+
+We have not talked about step lengths in module 1 (it is covered in module 3). If unsure how to calcualte the step lengths, you can use the function `step_lengths()` on any `track`-object.
+
+For example
+
+```{r}
+library(amt)
+data(deer) # loeads the deer data set
+head(deer) |> step_lengths()
+```
+
+
+## Solution 
+
+First load the data and create a track:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+#| eval: FALSE
+
+library(amt)
+library(tidyverse)
+
+dat <- read_csv(here::here("data/fisher.csv"))
+
+leroy <- filter(dat, name == "Leroy")
+leroy <- make_track(leroy, x_, y_, t_)
+```
+
+Then we have to resample the track to a suitable rate, here we choose 15 min, after looking at `summarize_sampling_rate()` and calculate the step lengths. 
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+#| eval: FALSE
+
+leroy <- track_resample(leroy, rate = minutes(15), tolerance = minutes(2))
+leroy1 <- leroy %>% mutate(sl = step_lengths(.))
+```
+
+Now we can summarize the step length of the first step and last step for each burst and create a boxplot to visualize the result. 
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+#| eval: FALSE
+leroy1 |> group_by(burst_) |> 
+  summarize(fs = head(sl, 1), ls = tail(sl, 1)) |> 
+  pivot_longer(-burst_) |> 
+  ggplot(aes(name, value)) + geom_boxplot()
+```
+
+It appears that last steps of bursts are on average longer than the first steps. There is no biological reason to assume this.
+
+
+Next, lets repeat the same analysis with acknowleding bursts. I am presenting here an approach that useses the `nest()` function from the `tidyverse()`. If you have not used this before, I will talk in much more detail about this in module 7. 
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+#| eval: FALSE
+# Let's repeat the same analysis, but this time with bursts now for calculating
+# step lengths (we need to nest our data here)
+leroy2 <- leroy1 |> nest(data = -burst_) |> 
+  mutate(data = map(data, ~ mutate(.x, sl = step_lengths(.x)))) |> 
+  unnest(cols = data)
+
+leroy2 |> group_by(burst_) |> 
+  summarize(fs = head(sl, 1), ls = tail(sl, 2)[1]) |> 
+  pivot_longer(-burst_) |> 
+  ggplot(aes(name, value)) + geom_boxplot()
+
+```
+
