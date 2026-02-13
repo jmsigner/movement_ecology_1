@@ -1,0 +1,85 @@
+---
+title: "Exercise 3"
+author:
+  - name: Johannes Signer
+    orcid: 0000-0002-1771-7775
+    email: jmsigner@gmail.com
+date: last-modified
+format: html
+---
+
+## Exercise
+### Data
+Use tracking data of one red deer from northern Germany. The data can be obtained with with `data(deer)` in `amt`. You can get a forest layer for the study area with `get_sh_forest()`, where 1 is encoded as forest and 0 as non-forest or open. 
+
+### Task
+Compute the step lengths and turn angles for the tracked deer. Try to answer the following questions: 
+
+1. Do step lengths differ for steps that start during day or during night? 
+2. Do steps that start and end in the forest are different from steps that start and end in the open or have start and end in different habitat?
+
+*A visual inspection/comparison is sufficient*. 
+
+## Solution 
+
+First load the data and create a track:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+#| eval: FALSE
+
+library(amt)
+library(tidyverse)
+
+data(deer)
+forest <- get_sh_forest()
+```
+
+
+Next lets transform to steps and calculate time of day. 
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+#| eval: FALSE
+
+deer1 <- deer |> steps_by_burst() |> time_of_day(where = "both")
+
+```
+
+Now we can plot steps that start during day and during night. 
+
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+#| eval: FALSE
+
+deer1 |> 
+  ggplot(aes(tod_start_, sl_)) + 
+  geom_boxplot() +
+  theme_light()
+
+```
+
+Finally, lets annotate steps with covariates
+
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+#| eval: FALSE
+
+deer1 |> 
+  extract_covariates(forest, where = "both") |> 
+  mutate(
+    step_type = case_when(
+      forest_start == 1 & forest_end == 1 ~ "forest", 
+      forest_start == 0 & forest_end == 0 ~ "open", 
+      forest_start != forest_end ~ "mixed"
+    )
+  ) |> 
+  ggplot(aes(step_type, sl_)) + geom_boxplot()
+
+```
