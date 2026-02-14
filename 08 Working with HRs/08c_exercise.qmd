@@ -1,0 +1,56 @@
+---
+title: "Exercise 8"
+author:
+  - name: Johannes Signer
+    orcid: 0000-0002-1771-7775
+    email: jmsigner@gmail.com
+date: last-modified
+format: html
+---
+
+## Exercise
+
+Create an interactive map of the MCP home ranges of the four fisher. Make sure they are labled with their names (*Hint: make use of the argument `zcol` in `mapview()`). 
+
+
+## Solution 
+
+First load the data and create a track:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+#| eval: FALSE
+
+library(amt)
+library(tidyverse)
+
+data("amt_fisher")
+```
+
+
+Calcualte home ranges
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+#| eval: FALSE
+
+dat1 <- amt_fisher |> nest(data = -name) |>
+  mutate(hr = map(data, ~ hr_mcp(., trast = trast, level = c(0.95))))
+
+```
+
+Create a map. 
+
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+#| eval: FALSE
+
+library(mapview)
+dat1 |> hr_to_sf(hr, name) |> 
+  mapview(zcol = "name")
+```
+
