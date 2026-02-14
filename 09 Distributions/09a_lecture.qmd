@@ -1,0 +1,205 @@
+---
+title: "Distribution for Animal Movement"
+subtitle: "Analysis of Animal Movement Data with R (together with Brian Smith)"
+format: 
+  clean-revealjs:
+    progress: true
+    code-line-numbers: false
+author:
+  - name: Johannes Signer
+    orcid: 0000-0002-1771-7775
+    email: jmsigner@gmail.com
+    affiliations: University of Göttingen, Germany & Freelancer
+date: last-modified
+execute:
+  echo: true
+  warning: false
+  message: false
+filters: 
+  - timer
+revealjs-plugins:
+  - codefocus
+---
+
+```{r setup}
+#| include: false
+library(tidyverse)
+library(amt)
+
+knitr::opts_knit$set(
+  root.dir = here::here("09 Distributions/")
+)
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.height = 4.5,
+  fig.width = 4.5
+)
+```
+
+
+## Distributions in statistics
+
+
+- Random variables, are variables where each outcome has a probability and these probabilities are often mathematically summarized with functions that are characterized with one or more parameters (=**distributions**). 
+- A distribution translates the a possible outcome in a probability, given some parameters.
+
+
+---
+
+For example, a normal distribution is characterized by the $\mu$ (mean) and $\sigma$ (standard deviation). If we know $\mu$ and $\sigma$ we can plot the distribution
+
+```{r, out.width="60%"}
+curve(dnorm(x, mean = 10, sd = 2), from = 5, to = 15)
+```
+
+Note, `dnorm()` is a built-in function for the normal density function.
+
+---
+
+- The normal distribution is very widely used in statistics, however, it is not useful to characterize step lengths and turn angles of animals, because values can range from $-\infty$ to $\infty$.
+
+**Think-pair-share:** what properties do distributions need to have, in order to describe animal movement?
+
+::: {.fragment}
+
+- For step lengths we need a distribution with a support of positive values. 
+- For turn angles we need a wrapped distribution. 
+
+:::
+
+
+## Distributions for step lengths
+
+- Suitable distribution for step lengths: Gamma, Exponential, Half Normal, Weibull and possibly others. 
+- We will use the Gamma distribution.
+- The Gamma distribution has two parameters: shape and scale.
+
+---
+
+```{r, echo = FALSE, out.width="100%"}
+xs <- seq(0.5, 200, 0.5)
+params <- expand_grid(shape = c(2, 5, 10, 15, 20), scale = c(2, 5, 8))
+params %>% mutate(
+  data = map2(shape, scale, ~
+                tibble(
+                  x = xs, 
+                  pdf = dgamma(xs, shape = .x, scale = .y)))) %>% 
+  unnest(cols = data) %>% 
+  mutate(
+    scale_lab = paste0("scale = ", scale),
+    shape_lab = factor(shape)
+    ) %>% 
+  ggplot(aes(x, pdf, col = shape_lab)) + 
+  geom_line() + 
+  facet_grid(. ~ scale_lab, scale = "free") +
+  theme(legend.position = "bottom") + 
+  labs(x = "step length", col = "shape", col = "shape")
+```
+
+---
+
+<iframe 
+  src="https://jmsigner.shinyapps.io/gamma/" 
+  style="width:100%; height:700px; border:none;">
+</iframe>
+
+
+## Distributions for turn angles
+
+- For turn angles we need a wrapped distribution. 
+- A typical distributions are the von Mises or the wrapped Cauchy distribution. 
+
+---------
+
+<iframe 
+  src="https://jmsigner.shinyapps.io/vonmises/" 
+  style="width:100%; height:700px; border:none;">
+</iframe>
+
+
+## Parameters may change
+
+- Parameters for step-length distribution and turn-angle distribution can change, resembling different behavioral states of the animal (e.g., foraging vs. resting). 
+
+
+```{r, echo = FALSE, fig.cap="Figure from Moll et al. 2021"}
+knitr::include_graphics("img/moll3_part.jpg")
+```
+
+## Maximum Likelihood Estimation (MLE)
+
+:::: {.columns}
+
+::: {.column width="50%"}
+We observe movement data:
+
+- Step lengths  
+- Turn angles  
+
+We assume they follow a distribution:
+
+- Gamma (step lengths)
+- von Mises (turn angles)
+
+:::
+
+::: {.column width="50%" .fragment}
+
+We try different parameter values and ask:
+
+> "How likely is it that these parameters generated the data we observed?"
+
+MLE chooses the parameter values that make the observed data most plausible.
+
+:::
+::::
+
+:::{.callout-note .fragment}
+### In a nutshell
+Find the distribution that best matches the data.
+:::
+
+## MLE for Step Lengths and Turn Angles
+
+:::: {.columns}
+::: {.column width="50%"}
+### Step lengths (Gamma)
+
+We adjust:
+
+- Shape
+- Scale
+
+We choose the values that make the observed step lengths most likely.
+
+:::
+
+::: {.column width="50%" .fragment}
+### Turn angles (von Mises)
+
+We adjust:
+
+- Concentration ($\kappa$)
+
+We choose the values that make the observed turning angles most likely.
+:::
+
+::::
+
+:::{.fragment}
+R searches for the parameter values that best explain the data through numerical optimization.
+:::
+
+
+
+## Take-home messages
+
+1. We can use statistical distributions to characterize the movement of animals.
+2. Statistical distributions are described using one or more parameters. 
+3. Different behavioral states of the animal can be described with different parameter sets.
+
+
+
