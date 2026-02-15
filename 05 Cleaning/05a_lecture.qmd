@@ -484,6 +484,9 @@ trk %>%
 ::: {style="font-size: 60%;"}
 
 ```{r, results='asis', echo=FALSE}
+#| results: asis
+#| echo: false
+
 NoCite(bib)
 PrintBibliography(bib, .opts = 
                     list(no.print.fields = c("issn", "url")))
