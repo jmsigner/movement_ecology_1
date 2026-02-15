@@ -1,0 +1,491 @@
+---
+title: "Home Ranges"
+subtitle: "Analysis of Animal Movement Data with R (with Johannes Signer)"
+format: 
+  clean-revealjs:
+    progress: true
+    code-line-numbers: false
+    width: 1400
+    height: 800
+    margin: 0.1
+author:
+  - name: Brian J. Smith
+    orcid: 0000-0002-0531-0492
+    email: brian.smith@usu.edu
+    affiliations: Utah State University
+date: last-modified
+execute:
+  echo: true
+  warning: false
+  message: false
+filters: 
+  - timer
+revealjs-plugins:
+  - codefocus
+---
+
+```{r setup}
+#| include: false
+library(tidyverse)
+library(RefManageR)
+
+knitr::opts_knit$set(
+  root.dir = here::here("06 Home Ranges/")
+)
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.height = 4.5,
+  fig.width = 4.5
+)
+
+options(htmltools.dir.version = FALSE)
+BibOptions(check.entries = FALSE, bib.style = "authoryear", style = "markdown",
+           dashed = TRUE, hyperlink = "to.doc")
+bib <- ReadBib(here::here("06 Home Ranges/", "06_refs.bib"))
+```
+
+# What is a home range?
+
+  
+## Classic definition
+
+> "That area traversed by the individual in its normal activities of food gathering, mating, and caring for young. Occasional sallies outside the area, perhaps exploratory in nature, should not be considered as part of the home range."
+
+— Burt 1943
+
+
+## Some modern definitions
+
+> "Home ranges are the spatial expression of behaviours animals perform to survive and reproduce. These macroscopic patterns are determined by a large number of single movement steps, each of which results from the interactions among individual characteristics, individual state, and the external environment, and the moving animal in turn modifies both its individual state and the external environment. Home ranges are hence the resultant patterns of dynamic processes, which has profound consequences for the population-level effects of home range behaviour."
+
+— Börger et al. 2008
+
+
+## Some modern definitions
+
+> "We propose that a home range is that part of an animal’s cognitive map that it chooses to keep up-to-date with the status of resources (including food, potential mates, safe sites, and so forth) and where it is willing to go to meet its requirements (even though it may not go to all such places)."
+
+— Powell and Mitchell 2012
+
+
+## Take-home Messages {background-color="#0c4869"}
+
+- Home ranges *emerge* from a complex interplay of different factors:
+    - the heterogeneous environment
+    - the organism's internal state
+      - its current needs/drivers
+      - its cognitive map
+    - the organism's movement capacity
+- Home-range estimation should be question driven, recognizing that home ranges, *per se*, are not typically the focus of biological interest (Fieberg and Börger 2012).
+
+
+# Estimating the home range
+
+
+## A criticism of the classic definition
+
+> "The conceptual definition of home range given by Burt (1943) lacks an objective, mathematical description that can be statistically estimated from data. We view relocation data as a sample of a much longer, continuous trajectory that is only one of many possible movement-path realizations of a continuous-time stochastic process."
+
+— Fleming et al. 2015
+ 
+
+## Two targets for estimation
+
+- ### Range distribution
+
+- ### Occurrence distribution
+
+## Two targets for estimation
+
+- ### Range distribution
+
+> "The range distribution addresses the lifetime space requirements of an animal and provides a metric that can be compared across individuals."
+
+— Fleming et al. 2015
+<br>
+
+- ### Occurrence distribution
+
+> "... where an animal was located during the observation period."
+
+— Fleming et al. 2015
+
+
+## Two targets for estimation
+
+<center>
+
+![Occurence Distribution](figs/occ_fig.png)\
+
+</center>
+
+
+## Two targets for estimation
+
+<center>
+
+![Occurence Distribution with long track](figs/occ_fig_long.png)\
+
+</center>
+
+## Two targets for estimation
+
+<center>
+
+![Range Distribution](figs/rng_fig.png)\
+
+</center>
+
+
+## Types of estimators
+
+### Geometric
+- Constructed following a set of rules; often hull-based.
+- Based on the observed locations.
+
+### Probabilistic
+- Rely on an underlying probabilistic model used to construct a **utilization distribution (UD)**.
+- Can be represented as a hull by outlining a cumulative probability of use.
+
+## Illustrating estimators
+
+:::: {.columns}
+
+::: {.column}
+.pull-left[
+We will illustrate some geometric and probabilistic estimators using example data from a published dataset on fishers (*Pekania pennanti*) from New York, USA (LaPoint et al. 2013).
+
+![fisher](figs/fisher.png)\
+
+The example data are also available in the package `amt`.
+
+:::
+
+::: {.column}
+
+![fisher locations](figs/locs.png)\
+
+:::
+
+::::
+
+
+## Geometric Estimators
+
+Geometric estimators rely only the observed data.
+
+Therefore, they always estimate the occurrence distribution.
+
+
+## Geometric Estimators
+
+:::: {.columns}
+
+::: {.column}
+
+### Minimum Convex Polygon (MCP)
+
+- 100% MCP: The smallest polygon that encompasses 100% of the locations without any concave sides (all interior angles ≤ 180°).
+
+- Smaller MCPs can be created by excluding the most extreme locations.
+  + *E.g.*, a 95% MCP excludes 5% of the most extreme locations before fitting an MCP.
+
+
+:::
+
+::: {.column}
+
+![MCP](figs/mcp.png)\
+
+:::
+
+::::
+
+
+## Geometric Estimators
+
+:::: {.columns}
+
+::: {.column}
+
+
+### Local Convex Hull (LoCoH)
+- Constructs small MCPs around every location and groups of its "neighbors".
+- Nearby hulls are the successively merged to create an isopleth containing $x$ % of the locations.
+- Smaller isopleths are more intensively used.
+  - Approximates a UD.
+- Resulting home range can contain sharp edges and holes.
+
+[ See Getz et al. (2004, 2007) for details. ]{style="font-size: 70%"}
+
+:::
+
+::: {.column}
+
+![LoCoH](figs/locoh.png)\
+
+:::
+
+::::
+
+## Geometric Estimators
+
+:::: {.columns}
+
+::: {.column}
+
+### Local Convex Hull (LoCoH)
+- Neighborhoods can be defined by one of several algorithms
+  - Fixed points **k-LoCoH**: Each hull contains the focal point and its $k-1$ nearest neighbors
+  - Fixed radius **r-LoCoH**: Each hull contains all points within a radius $r$ of the focal point
+  - Adaptive **a-LoCoH**: Each hull contains all points within a variable radius such that the sum of the distances between the points and the focal point is $\leq a$.
+
+:::
+
+::: {.column}
+![LoCoH](figs/locoh.png)\
+
+:::
+
+::::
+
+
+## Probabilistic Estimators
+
+
+Probabilistic estimators are constructed from an underlying statistical model for the UD.
+
+They might estimate the occurrence distribution *or* the range distribution.
+
+##
+
+*But first,* 
+
+### What is a UD?
+
+## What is a UD?
+
+:::: {.columns}
+
+::: {.column}
+
+> The utilization distribution is "a probability distribution ... for the use of space with respect to time. That is, the utilization distribution usually calculated shows the probabilities of where an animal might have been found at any randomly chosen *time*."
+
+— Powell and Mitchell 2012
+
+:::
+
+::: {.column}
+
+![UD](figs/ud.png)\
+
+:::
+
+::::
+
+
+## Probabilistic Estimators
+
+:::: {.columns}
+
+::: {.column}
+
+### Kernel Density Estimator (KDE)
+
+- Kernel density estimation is a general problem in statistics. 
+  - (estimating a continuous PDF from discrete samples)
+- Smooths over the locations using a weighted window, the "kernel".
+- Sensitive to choice of "bandwidth" parameter (size of the kernel).
+- Estimates the **occurrence distribution**.
+
+:::
+
+::: {.column}
+
+![KDE](figs/kde.png)\
+
+:::
+
+::::
+
+
+## Probabilistic Estimators
+
+:::: {.columns}
+
+::: {.column}
+
+
+### Autocorrelated Kernel Density Estimator (aKDE)
+
+- Based on an underlying continuous-time movement model.
+- Uses autocorrelation in the movement data to estimate the smoothing parameter.
+- Estimates the **range distribution**.
+
+[ See [Silva et al. 2021](https://doi.org/10.1111/2041-210X.13786) for a recent review and practical guide for aKDE estimation. ]{style="font-size: 70%"}
+
+:::
+
+::: {.column}
+
+![aKDE](figs/akde.png)\
+
+:::
+
+::::
+
+
+## Take-home Messages {background-color="#0c4869"}
+
+- Home range estimators can target either of two distributions:
+  - Occurrence distribution: where the animal was during the study period
+  - Range distribution: where the animal could be found at any future time if its movement process remains the same.
+  
+- Geometric estimators only rely on observed data and can only estimate the occurrence distribution.
+
+- Probabilistic estimators are based on an underlying model for the UD. They can estimate the occurrence distribution or the range distribution depending on the underlying model.
+
+
+## Other estimators
+
+- There are **many** other home range estimators.
+  
+- A few examples worth (briefly) discussing:
+  - Brownian bridge
+  - T-LoCoH
+
+## Brownian Bridge Home Ranges
+
+:::: {.columns}
+
+::: {.column}
+
+- Estimates the UD by fitting a Brownian bridge movement model between successive locations.  
+
+  - Estimates uncertainty around a step by assuming [Brownian motion](https://en.wikipedia.org/wiki/Brownian_motion) between start and end point.  
+  
+[ See Horne et al. (2007) for details. ]{style="font-size: 70%"}
+
+[Figure inspired by `adehabitatHR` vignette ([Calenge 2015](https://mran.microsoft.com/snapshot/2016-08-05/web/packages/adehabitatHR/vignettes/adehabitatHR.pdf)).]{style="font-size: 70%"}
+
+:::
+
+::: {.column}
+
+![Hypothetical Track](figs/bb_locs.png)\
+![KDEs](figs/bb_ex.png)\
+
+:::
+
+::::
+
+## Brownian Bridge Home Ranges
+
+:::: {.columns}
+
+::: {.column}
+
+- Estimates the UD by fitting a Brownian bridge movement model between successive locations.  
+
+  - Extensions allow multiple movement modes (Dynamic BBMM;[ Kranstauber et al. 2012](https://doi.org/10.1111/j.1365-2656.2012.01955.x)) and covariates (BBCM; [Kranstauber 2019](https://doi.org/10.1186/s40462-019-0167-3)).  
+  
+  - Fit using `R` packages `adehabitatHR` or `move`.
+  
+  - Probabilistic estimator.
+
+:::
+
+::: {.column}
+
+![Fisher BBHR](figs/bb2.png)\  
+
+:::
+
+::::
+
+## Brownian Bridge Home Ranges
+
+:::: {.columns}
+
+::: {.column}
+
+**Ordinary KDE**
+![Ordinary KDE](figs/kde.png)\
+
+:::
+
+::: {.column}
+
+**BBMM KDE**
+![BBMM KDE](figs/bb.png)\
+
+:::
+
+::::
+
+## T-LoCoH
+
+:::: {.columns}
+
+::: {.column}
+
+- Extension of LoCoH that considers time 
+  - Clustering is based on space-time distance.
+  - Relies on a conversion factor $(s)$ to make units of time and space comparable. [(Choosing this parameter is the hardest part.)]{style="font-size: 70%"}
+  - Fit using `R` package [`tlocoh`](https://tlocoh.r-forge.r-project.org/).
+  - Geometric estimator.
+  
+[ See Lyons et al. (2013) for details. ]{style="font-size: 70%"}
+
+:::
+
+::: {.column}
+
+![T-LoCoH](figs/tlocoh.png)\
+
+:::
+
+::::
+
+## T-LoCoH Home Ranges
+
+:::: {.columns}
+
+::: {.column}
+
+**Ordinary a-LoCoH**
+![a-LoCoH](figs/locoh.png)\
+
+:::
+
+::: {.column}
+
+**T-LoCoH**
+![T-LoCoH](figs/tlocoh.png)\
+
+:::
+
+::::
+
+
+# Questions?
+
+## References {.scrollable}
+
+
+::: {style="font-size: 60%;"}
+
+```{r}
+#| results: asis
+#| echo: false
+
+NoCite(bib)
+PrintBibliography(bib, .opts = 
+                    list(no.print.fields = c("issn", "url")))
+```
+
+
+:::
