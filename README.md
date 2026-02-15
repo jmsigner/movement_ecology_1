@@ -16,12 +16,12 @@ statistical distributions.
 1.  Introduction to movement data (GPS; J)  
 2.  Introduction to movement data (Argos, Acoustic; B)  
 3.  Characterizing movement data with steps and turns (J)
-4.  Movement as RW and CRW (B)
+4.  Random walk models (B)
 
 ## Day 2
 
 5.  Detecting and handling outliers (B)
-6.  Home ranges concepts and tools and akde (B)
+6.  Home ranges concepts and tools (B)
 7.  Handling multiple animals (J)
 
 ## Day 3
