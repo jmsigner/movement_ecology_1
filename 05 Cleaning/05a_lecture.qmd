@@ -459,7 +459,8 @@ trk %>%
 - Error distributions are well studied for each location class (bivariate t-distributions).
 
 - Often modeled with an SSM (*e.g.*, Jonsen et al. 2005).
-  - Implemented in R package `bsam` (https://github.com/ianjonsen/bsam).
+  - Implemented in R package `bsam` ([https://github.com/ianjonsen/bsam](https://github.com/ianjonsen/bsam){target="blank"}).
+  - Newer implementation in R package `aniMotum` ([https://github.com/ianjonsen/aniMotum](https://github.com/ianjonsen/aniMotum){target="blank"}).
 
 
 ## Passive Acoustic Telemetry
