@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="05a_lecture_files/libs/clipboard/clipboard.min.js"></script>
+<script src="05a_lecture_files/libs/quarto-html/tabby.min.js"></script>
+<script src="05a_lecture_files/libs/quarto-html/popper.min.js"></script>
+<script src="05a_lecture_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="05a_lecture_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="05a_lecture_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="05a_lecture_files/libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="05a_lecture_files/libs/quarto-contrib/quarto-timer-1.0.0/timer.js"></script>
+<link href="05a_lecture_files/libs/quarto-contrib/quarto-timer-1.0.0/timer.css" rel="stylesheet">
+<script src="05a_lecture_files/libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="05a_lecture_files/libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="05a_lecture_files/libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.8.27">
+
+  <meta name="author" content="Brian J. Smith">
+  <meta name="dcterms.date" content="2026-02-15">
+  <title>GPS Data Cleaning</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="05a_lecture_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="05a_lecture_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="05a_lecture_files/libs/revealjs/dist/theme/quarto-5ae9c59b2727fcd5357d4f034d95f9e0.css">
+  <link href="05a_lecture_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="05a_lecture_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="05a_lecture_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="05a_lecture_files/libs/revealjs/plugin/reveal-code-focus/codefocus.css" rel="stylesheet">
+  <link href="05a_lecture_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+<script src="mathjax-config.js"></script>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">GPS Data Cleaning</h1>
+  <p class="subtitle">Analysis of Animal Movement Data with R (with Johannes Signer)</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Brian J. Smith <a href="https://orcid.org/0000-0002-0531-0492" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a>
+</div>
+<div class="quarto-title-author-email">
+<a href="mailto:brian.smith@usu.edu">brian.smith@usu.edu</a>
+</div>
+        <p class="quarto-title-affiliation">
+            Utah State University
+          </p>
+    </div>
+</div>
+
+  <p class="date">February 15, 2026</p>
+</section>
+<section id="outline" class="slide level2">
+<h2>Outline</h2>
+<ul>
+<li><p>Collecting GPS Data</p></li>
+<li><p>Cleaning GPS Data</p></li>
+<li><p>Other Data Types</p></li>
+</ul>
+</section>
+<section>
+<section id="collecting-gps-data" class="title-slide slide level1 center">
+<h1>Collecting GPS Data</h1>
+
+</section>
+<section id="how-does-gps-work" class="slide level2">
+<h2>How does GPS work?</h2>
+<p><br></p>
+<center>
+<p>(Watch this during lecture)</p>
+<p><a href="https://youtu.be/FU_pY2sTwTA" target="blank">https://youtu.be/FU_pY2sTwTA</a></p>
+</center>
+</section>
+<section id="how-does-gps-work-1" class="slide level2">
+<h2>How does GPS work?</h2>
+<p><br></p>
+<ul>
+<li>Satellites broadcast the time</li>
+<li>Device compares with current time to calculate distance</li>
+<li>Uses trilateration to calculate location</li>
+<li>Requires an extra satellite to correct time drift</li>
+</ul>
+</section>
+<section id="collecting-gps-data-1" class="slide level2">
+<h2>Collecting GPS Data</h2>
+<p><br></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>collar_ID</th>
+<th>x</th>
+<th>y</th>
+<th>t</th>
+<th>n_satellite</th>
+<th>DOP</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>123</td>
+<td>…</td>
+<td>…</td>
+<td>12:01:23</td>
+<td>6</td>
+<td>5.5</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="collecting-gps-data-2" class="slide level2">
+<h2>Collecting GPS Data</h2>
+<p><br></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>collar_ID</th>
+<th>x</th>
+<th>y</th>
+<th>t</th>
+<th>n_satellite</th>
+<th>DOP</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>123</td>
+<td>…</td>
+<td>…</td>
+<td>12:01:23</td>
+<td>6</td>
+<td>5.5</td>
+</tr>
+<tr class="even">
+<td>123</td>
+<td>…</td>
+<td>…</td>
+<td>13:01:17</td>
+<td>5</td>
+<td>7</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="collecting-gps-data-3" class="slide level2">
+<h2>Collecting GPS Data</h2>
+<p><br></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>collar_ID</th>
+<th>x</th>
+<th>y</th>
+<th>t</th>
+<th>n_satellite</th>
+<th>DOP</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>123</td>
+<td>…</td>
+<td>…</td>
+<td>12:01:23</td>
+<td>6</td>
+<td>5.5</td>
+</tr>
+<tr class="even">
+<td>123</td>
+<td>…</td>
+<td>…</td>
+<td>13:01:17</td>
+<td>5</td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<td>123</td>
+<td>…</td>
+<td>…</td>
+<td>14:01:21</td>
+<td>6</td>
+<td>7</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="collecting-gps-data-4" class="slide level2">
+<h2>Collecting GPS Data</h2>
+<p><br></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>collar_ID</th>
+<th>x</th>
+<th>y</th>
+<th>t</th>
+<th>n_satellite</th>
+<th>DOP</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>123</td>
+<td>…</td>
+<td>…</td>
+<td>12:01:23</td>
+<td>6</td>
+<td>5.5</td>
+</tr>
+<tr class="even">
+<td>123</td>
+<td>…</td>
+<td>…</td>
+<td>13:01:17</td>
+<td>5</td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<td>123</td>
+<td>…</td>
+<td>…</td>
+<td>14:01:21</td>
+<td>6</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td>123</td>
+<td>…</td>
+<td>…</td>
+<td>14:01:19</td>
+<td>7</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="collecting-gps-data-5" class="slide level2">
+<h2>Collecting GPS Data</h2>
+<p><br></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>collar_ID</th>
+<th>x</th>
+<th>y</th>
+<th>t</th>
+<th>n_satellite</th>
+<th>DOP</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>123</td>
+<td>…</td>
+<td>…</td>
+<td>12:01:23</td>
+<td>6</td>
+<td>5.5</td>
+</tr>
+<tr class="even">
+<td>123</td>
+<td>…</td>
+<td>…</td>
+<td>13:01:17</td>
+<td>5</td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<td>123</td>
+<td>…</td>
+<td>…</td>
+<td>14:01:21</td>
+<td>6</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td>123</td>
+<td>…</td>
+<td>…</td>
+<td>14:01:19</td>
+<td>7</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td>123</td>
+<td>–</td>
+<td>–</td>
+<td>15:01:30</td>
+<td>0</td>
+<td>–</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="collecting-gps-data-6" class="slide level2">
+<h2>Collecting GPS Data</h2>
+<p><br></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>collar_ID</th>
+<th>x</th>
+<th>y</th>
+<th>t</th>
+<th>n_satellite</th>
+<th>DOP</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>123</td>
+<td>…</td>
+<td>…</td>
+<td>12:01:23</td>
+<td>6</td>
+<td>5.5</td>
+</tr>
+<tr class="even">
+<td>123</td>
+<td>…</td>
+<td>…</td>
+<td>13:01:17</td>
+<td>5</td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<td>123</td>
+<td>…</td>
+<td>…</td>
+<td>14:01:21</td>
+<td>6</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td>123</td>
+<td>…</td>
+<td>…</td>
+<td>14:01:19</td>
+<td>7</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td>123</td>
+<td>–</td>
+<td>–</td>
+<td>15:01:30</td>
+<td>0</td>
+<td>–</td>
+</tr>
+<tr class="even">
+<td>123</td>
+<td>…</td>
+<td>…</td>
+<td>16:01:27</td>
+<td>4</td>
+<td>8</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="dilution-of-precision-dop" class="slide level2">
+<h2>Dilution of Precision (DOP)</h2>
+<p><br></p>
+<center>
+<p>Watch these later</p>
+<p><a href="https://youtu.be/nAkudf45Y10">https://youtu.be/nAkudf45Y10</a></p>
+<p><a href="https://youtu.be/h1jXqTRto1Q">https://youtu.be/h1jXqTRto1Q</a></p>
+</center>
+</section>
+<section id="dilution-of-precision-dop-1" class="slide level2">
+<h2>Dilution of Precision (DOP)</h2>
+<center>
+<p>Measure of potential loss of precision due to satellite geometry</p>
+</center>
+<ul>
+<li>PDOP
+<ul>
+<li>Position parameters (lat, lon, alt)<br>
+</li>
+</ul></li>
+<li>HDOP
+<ul>
+<li>Horizontal parameters (lat, lon)<br>
+</li>
+</ul></li>
+<li>VDOP
+<ul>
+<li>Vertical parameter (alt)<br>
+</li>
+</ul></li>
+<li>TDOP
+<ul>
+<li>Time parameter (time correction)</li>
+</ul></li>
+</ul>
+</section>
+<section id="dilution-of-precision-dop-2" class="slide level2">
+<h2>Dilution of Precision (DOP)</h2>
+<center>
+<p><strong>Lower is better!</strong></p>
+</center>
+<h3 id="rough-guidelines-by-bjs">Rough guidelines (by BJS):</h3>
+<ul>
+<li>1–2: Excellent</li>
+<li>2–4: Very Good</li>
+<li>4–6: Good</li>
+<li>6–8: Fair (I typically filter these for elk)</li>
+<li>8–10: Poor</li>
+<li>&gt;10: Very poor</li>
+</ul>
+</section>
+<section id="missing-fixes" class="slide level2">
+<h2>Missing fixes</h2>
+<ul>
+<li><p>Small % of <strong>random</strong> missing fixes are typically not a problem</p></li>
+<li><p>Many causes of missing fixes are <strong>non-random</strong></p>
+<ul>
+<li><em>e.g.</em>, dense canopy creates habitat-biased missing fixes</li>
+</ul></li>
+<li><p>Some discussion of this in the literature</p>
+<ul>
+<li>Frair et al.&nbsp;(2010)</li>
+<li>Smith et al.&nbsp;(2018)</li>
+</ul></li>
+</ul>
+</section>
+<section id="missing-fixes-1" class="slide level2">
+<h2>Missing fixes</h2>
+<div class="columns">
+<div class="column">
+<p><a href="figs/python_tag.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Burmese python GPS antenna"><img data-src="figs/python_tag.png" alt="Burmese python GPS antenna"></a><br>
+</p>
+</div><div class="column">
+<p><a href="figs/python.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Python submerged in water"><img data-src="figs/python.png" alt="Python submerged in water"></a><br>
+</p>
+</div></div>
+</section>
+<section id="section" class="slide level2" data-background-image="figs/A02_bias.png" data-background-size="contain">
+<h2></h2>
+</section>
+<section id="section-1" class="slide level2" data-background-image="figs/A02_bias.png" data-background-size="contain">
+<h2></h2>
+<p><br></p>
+<center>
+<p><span style="color:red; font-size:48pt; font-weight:bold; background-color:#FFFFFF90;"> BEWARE! </span></p>
+</center>
+</section></section>
+<section>
+<section id="cleaning-gps-data" class="title-slide slide level1 center">
+<h1>Cleaning GPS Data</h1>
+
+</section>
+<section id="methods-for-cleaning" class="slide level2">
+<h2>Methods for Cleaning</h2>
+<ul>
+<li><p>By hand</p></li>
+<li><p>Scripted routine (Bjørneraas et al.&nbsp;2010)</p></li>
+<li><p><code>amt</code> workflow</p></li>
+</ul>
+</section>
+<section id="amt-workflow" class="slide level2">
+<h2><code>amt</code> Workflow</h2>
+<ul>
+<li><p>General cleaning framework largely developed by Tal Avgar.</p></li>
+<li><p>Vignette in preparation.</p></li>
+<li><p>We welcome feedback on usage or other suggestions!</p></li>
+</ul>
+</section>
+<section id="amt-workflow-1" class="slide level2">
+<h2><code>amt</code> Workflow</h2>
+<ol type="1">
+<li class="fragment">Remove fixes before the device was on the animal</li>
+<li class="fragment">Remove fixes influenced by the capture</li>
+<li class="fragment">Remove locations in unreachable habitat</li>
+<li class="fragment">Filter low quality fixes</li>
+<li class="fragment">Flag low quality duplicates</li>
+<li class="fragment">Flag unreasonably fast steps</li>
+<li class="fragment">Flag fast roundtrips</li>
+<li class="fragment">Flag mortality/drop-off clusters</li>
+</ol>
+</section>
+<section id="remove-fixes-before-the-device-was-on-the-animal" class="slide level2">
+<h2>1. Remove fixes before the device was on the animal</h2>
+<p>Pretty straightforward.</p>
+<pre><code>trk %&gt;%
+  tracked_from_to(from = ymd_hms("2021-01-01 07:00:00"), 
+                  to = ymd_hms("2021-12-31 19:00:00"))</code></pre>
+</section>
+<section id="remove-fixes-influenced-by-the-capture" class="slide level2">
+<h2>2. Remove fixes influenced by the capture</h2>
+<p>Define a time period to remove from the beginning of the track.</p>
+<pre><code>trk %&gt;%
+  remove_capture_effect(start = days(2))</code></pre>
+<p>Used to clean post-capture behavior modifications.</p>
+</section>
+<section id="remove-locations-in-unreachable-habitat" class="slide level2">
+<h2>3. Remove locations in unreachable habitat</h2>
+<p>No specific function. <code>amt::extract_covariates()</code> will help attach a covariate of your choice, and then simply use <code>dplyr::filter()</code> to remove unwanted values.</p>
+<pre><code>trk %&gt;% 
+  extract_covariates(landuse) %&gt;% 
+  filter(!landuse %in% 11:12)</code></pre>
+<p><em>E.g.</em>, terrestrial animals in the ocean, fish on land, etc.</p>
+</section>
+<section id="filter-low-quality-fixes" class="slide level2">
+<h2>4. Filter low quality fixes</h2>
+<p>No specific function. Simply use <code>dplyr::filter()</code> to remove precision values below a desired threshold.</p>
+<pre><code>trk %&gt;% 
+  filter(dop &lt; 10)</code></pre>
+</section>
+<section id="flag-low-quality-duplicates" class="slide level2">
+<h2>5. Flag low quality duplicates</h2>
+<p>Define a time window of size <span class="math inline">\(\gamma\)</span>. Treat any two fixes within <span class="math inline">\(\pm \gamma/2\)</span> as duplicates. Keep only the record with the better (lower) precision metric.</p>
+<pre><code>trk %&gt;% 
+  flag_duplicates(gamma = minutes(5), DOP = "dop")</code></pre>
+<p><em>Note</em> that if you are using a metric where bigger is better (<em>e.g.</em>, number of satellites instead of DOP), multiply it by -1 first.</p>
+<p><em>Also note</em> that this function <em>flags</em> rather than <em>filters</em> locations. To filter:</p>
+<pre><code>trk %&gt;% 
+  flag_duplicates(gamma = minutes(5), DOP = "dop") %&gt;% 
+  filter(!duplicate_)</code></pre>
+</section>
+<section id="flag-unreasonably-fast-steps" class="slide level2">
+<h2>6. Flag unreasonably fast steps</h2>
+<p><em>This is where things get tricky.</em></p>
+<p>You will likely not have perfectly regular timesteps by this point.</p>
+<p>You might think you should calculate “speed” as <span class="math inline">\(\Delta p / \Delta t\)</span>, but that implies that distance scales <em>linearly</em> with time.</p>
+<p>Briefly, displacement (under a random walk) <em>does not</em> scale linearly with time, but rather <strong>squared</strong> displacement <em>does</em> scale linearly with time.</p>
+<p>Solution: use squared displacement rate to define “fast steps”.</p>
+<p>See <code>?amt::calculate_sdr</code> and <code>?amt::get_displacement</code>.</p>
+</section>
+<section id="flag-unreasonably-fast-steps-1" class="slide level2">
+<h2>6. Flag unreasonably fast steps</h2>
+<p>Choose an SDR, <span class="math inline">\(\delta\)</span>, so that steps with <span class="math inline">\(SDR &gt; \delta\)</span> are flagged.</p>
+<p>Units are assumed to be <span class="math inline">\(m^2/s\)</span>.</p>
+<pre><code>trk %&gt;% 
+  flag_fast_steps(delta = 10000)</code></pre>
+<p>Note that this does not remove those steps automatically.</p>
+<pre><code>trk %&gt;% 
+  flag_fast_steps(delta = 10000) %&gt;% 
+  filter(!fast_step_)</code></pre>
+<p><em>E.g.,</em> 10000 <span class="math inline">\(m^2/s\)</span> implies a displacement of 6 km in 1 hour but only 8.5 km in 2 hours.</p>
+</section>
+<section id="flag-fast-roundtrips" class="slide level2">
+<h2>7. Flag fast roundtrips</h2>
+<p>It is more likely that a single location is imprecise if it implies an unrealistically fast out-and-back round trip. In that case, the user might be willing to scale the threshold SDR.</p>
+<p><span class="math inline">\(\delta\)</span> gives the base SDR and <span class="math inline">\(\epsilon\)</span> is the scaling factor.</p>
+</section>
+<section id="flag-fast-roundtrips-1" class="slide level2">
+<h2>7. Flag fast roundtrips</h2>
+<div class="columns">
+<div class="column">
+<p>Position at time <span class="math inline">\(t\)</span> is flagged if:</p>
+<ul>
+<li><p><span class="math inline">\(SDR_1 &gt; \delta/\epsilon\)</span> and <span class="math inline">\(SDR_2 &gt; \delta/\epsilon\)</span></p></li>
+<li><p><span class="math inline">\(SDR_1 &gt; \epsilon SDR_3\)</span> and <span class="math inline">\(SDR_2 &gt; \epsilon SDR_3\)</span></p></li>
+</ul>
+<p><em>Note</em> that <span class="math inline">\(\epsilon\)</span> both decreases <span class="math inline">\(\delta\)</span> and increases <span class="math inline">\(SDR_3\)</span>.</p>
+</div><div class="column">
+<p><img data-src="figs/sdr_de.png" style="width:90.0%" alt="SDR Figure"><br>
+</p>
+</div></div>
+<h3 id="flag-fast-roundtrips-2">7. Flag fast roundtrips</h3>
+<pre><code>trk %&gt;% 
+  flag_roundtrips(delta = 10000, epsilon = 5)</code></pre>
+<p>This function does not remove locations.</p>
+<pre><code>trk %&gt;% 
+  flag_roundtrips(delta = 10000, epsilon = 5) %&gt;% 
+  filter(!fast_roundtrip_)</code></pre>
+</section>
+<section id="flag-mortalitydrop-off-clusters" class="slide level2">
+<h2>8. Flag mortality/drop-off clusters</h2>
+<p>If an animal with an active collar dies OR an active collar drops off the animal, we often don’t know exactly when the last valid location was.</p>
+<p><img data-src="figs/mort.png" alt="Animal mortality"><br>
+</p>
+</section>
+<section id="flag-mortalitydrop-off-clusters-1" class="slide level2">
+<h2>8. Flag mortality/drop-off clusters</h2>
+<p>We define defunct clusters as those with no movement at the end of a track, with these parameters:</p>
+<ul>
+<li><p><span class="math inline">\(\zeta\)</span>: the tolerance for steps to be considered of length 0</p>
+<ul>
+<li>(<em>e.g.</em>, <span class="math inline">\(\zeta = 5\)</span> allows all points within 5 m to be considered stationary)</li>
+</ul></li>
+<li><p><span class="math inline">\(\eta\)</span>: the minimum number of consecutive stationary points to form a cluster</p></li>
+<li><p><span class="math inline">\(\theta\)</span>: the minimum amount of time elapsed to form a cluster</p></li>
+</ul>
+<pre><code>trk %&gt;% 
+  flag_defunct_clusters(zeta = 10, eta = 5, theta = hours(24)) %&gt;% 
+  # Remove flagged clusters
+  filter(!defunct_cluster_)</code></pre>
+</section></section>
+<section>
+<section id="other-data-types" class="title-slide slide level1 center">
+<h1>Other Data Types</h1>
+
+</section>
+<section id="argos-satellite-tags" class="slide level2">
+<h2>ARGOS Satellite Tags</h2>
+<ul>
+<li><p>Data are labelled with a location class rather than DOP.</p></li>
+<li><p>Error distributions are well studied for each location class (bivariate t-distributions).</p></li>
+<li><p>Often modeled with an SSM (<em>e.g.</em>, Jonsen et al.&nbsp;2005).</p>
+<ul>
+<li>Implemented in R package <code>bsam</code> (https://github.com/ianjonsen/bsam).</li>
+</ul></li>
+</ul>
+</section>
+<section id="passive-acoustic-telemetry" class="slide level2">
+<h2>Passive Acoustic Telemetry</h2>
+<ul>
+<li><p>Acoustic signals are more easily corrupted than electromagnetic waves, resulting in the wrong tag ID being recorded.</p>
+<ul>
+<li>Type A false detections are of tag IDs not in the study (easy to discard)</li>
+<li>Type B false detections are of tag IDs in the study (hard to distinguish from real data)</li>
+</ul></li>
+<li><p>Some work on this in the literature (<em>e.g.</em>, Simpfendorfer et al.&nbsp;2015).</p>
+<ul>
+<li>Most rely on a speed filter (use SDR!) or coarse temporal scale summary stats.</li>
+</ul></li>
+<li><p>See also R package <code>glatos</code> (https://gitlab.oceantrack.org/GreatLakes/glatos).</p></li>
+</ul>
+</section></section>
+<section>
+<section id="questions" class="title-slide slide level1 center">
+<h1>Questions?</h1>
+
+</section>
+<section id="references" class="slide level2 scrollable">
+<h2>References</h2>
+<div style="font-size: 60%;">
+<p><a name="bib-bjorneraas_screening_2010" href=""></a><a href="#/cite-bjorneraas_screening_2010">Bjørneraas, K., B. Moorter, C. M. Rolandsen, et al.</a> (2010). “Screening Global Positioning System Location Data for Errors Using Animal Movement Characteristics”. En. In: <em>The Journal of Wildlife Management</em> 74.6, pp.&nbsp;1361-1366. DOI: <a href="https://doi.org/10.1111%2Fj.1937-2817.2010.tb01258.x">10.1111/j.1937-2817.2010.tb01258.x</a>.</p>
+<p><a name="bib-Frair2010" href=""></a><a href="#/cite-Frair2010">Frair, J. L., J. R. Fieberg, M. Hebblewhite, et al.</a> (2010). “Resolving issues of imprecise and habitat-biased locations in ecological analyses using GPS telemetry data”. In: <em>Philosophical Transactions of the Royal Society B-Biological Sciences</em> 365.1550. ISBN: 0962-8436, pp.&nbsp;2187-2200. DOI: <a href="https://doi.org/10.1098%2Frstb.2010.0084">10.1098/rstb.2010.0084</a>.</p>
+<p><a name="bib-Jonsen2005" href=""></a><a href="#/cite-Jonsen2005">Jonsen, I. D., J. M. Flemming, and R. A. Myers</a> (2005). “Robust state-space modeling of animal movement data”. In: <em>Ecology</em> 86.11. ISBN: 0012-9658, pp.&nbsp;2874-2880. DOI: <a href="https://doi.org/10.1890%2F04-1852">10.1890/04-1852</a>.</p>
+<p><a name="bib-simpfendorfer_ghosts_2015" href=""></a><a href="#/cite-simpfendorfer_ghosts_2015">Simpfendorfer, C. A., C. Huveneers, A. Steckenreuter, et al.</a> (2015). “Ghosts in the data: false detections in VEMCO pulse position modulation acoustic telemetry monitoring equipment”. En. In: <em>Animal Biotelemetry</em> 3.1, p.&nbsp;55. DOI: <a href="https://doi.org/10.1186%2Fs40317-015-0094-z">10.1186/s40317-015-0094-z</a>. (Visited on Nov.&nbsp;13, 2022).</p>
+<p><a name="bib-Smith2018" href=""></a><a href="#/cite-Smith2018">Smith, B. J., K. M. Hart, F. J. Mazzotti, et al.</a> (2018). “Evaluating GPS biologging technology for studying spatial ecology of large constricting snakes”. In: <em>Animal Biotelemetry</em> 6, p.&nbsp;1. DOI: <a href="https://doi.org/10.1186%2Fs40317-018-0145-3">10.1186/s40317-018-0145-3</a>.</p>
+</div>
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="05a_lecture_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="05a_lecture_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="05a_lecture_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="05a_lecture_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="05a_lecture_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="05a_lecture_files/libs/revealjs/plugin/reveal-code-focus/codefocus.js"></script>
+  <script src="05a_lecture_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="05a_lecture_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="05a_lecture_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="05a_lecture_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="05a_lecture_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealCodeFocus, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    <script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+    (function() {
+      let previousOnload = window.onload;
+      window.onload = () => {
+        if (previousOnload) {
+          previousOnload();
+        }
+        lightboxQuarto.on('slide_before_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          const href = trigger.getAttribute('href');
+          if (href !== null) {
+            const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+            if (imgEl !== null) {
+              const srcAttr = imgEl.getAttribute("src");
+              if (srcAttr && srcAttr.startsWith("data:")) {
+                slideConfig.href = srcAttr;
+              }
+            }
+          } 
+        });
+      
+        lightboxQuarto.on('slide_after_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(slideNode);
+          }
+        });
+      
+      };
+      
+    })();
+              </script>
+    
+
+</body></html>
