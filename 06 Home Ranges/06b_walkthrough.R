@@ -19,8 +19,8 @@ library(amt)
 # Source function for BCRW
 source("fun/bcrw.R")
 
-# We'll generate data for 4 different individuals in the Bear River mountains 
-# just east of Logan, UT. We'll assume our spatial coordinates are in 
+# We'll generate data for 4 different individuals in the Bear River mountains
+# just east of Logan, UT. We'll assume our spatial coordinates are in
 # UTMs (zone 12).
 
 centroids <- list("A01" = c("x" = 446589, "y" = 4625899),
@@ -39,16 +39,16 @@ dat <- lapply(centroids, function(cent) {
             centroid = cent,
             n_steps = 1000,
             sl_distr = c('shape' = 1, 'scale' = 300),
-            rho = 0.25, 
-            beta = 0.1) 
-  
+            rho = 0.25,
+            beta = 0.1)
+
   # Assign actual dates and times (start on June 20, 2021)
   x$date <- as.POSIXct("2021-06-20 00:00:00") +
     x$t * 60 * 60
-  
+
   # Return
   return(x)
-}) %>% 
+}) %>%
   bind_rows(.id = "ID")
 
 # See what we got
@@ -56,7 +56,7 @@ head(dat)
 tail(dat)
 
 # Format as 'track_xyt' for `amt`
-dat <- dat %>% 
+dat <- dat %>%
   make_track(x, y, date, ID = ID, crs = 32612)
 
 # Plot locations
@@ -68,7 +68,7 @@ ggplot(dat, aes(x = x_, y = y_, color = ID, group = ID)) +
   theme_bw()
 
 # Subset to just one individual
-a01 <- dat %>% 
+a01 <- dat %>%
   filter(ID == "A01")
 
 # Home range functions ----
@@ -86,7 +86,7 @@ a01 <- dat %>%
 # MCPs are the simplest home range estimator.
 # They only require one user decision: the level.
 
-# We can construct MCPs with multiple levels with a single call to the 
+# We can construct MCPs with multiple levels with a single call to the
 # function 'hr_mcp()'.
 
 mcps <- hr_mcp(a01, levels = c(0.5, 0.75, 0.95, 1))
@@ -116,11 +116,11 @@ str(mcps, max.level = 1)
 hr_area(mcps) # returns a tibble
 hr_area(mcps, units = TRUE) # returns area as a 'units' object for easy conversion
 # Get area in km^2
-hr_area(mcps, units = TRUE) %>% 
+hr_area(mcps, units = TRUE) %>%
   mutate(area = units::set_units(area, "km^2"))
 
 # Isopleths
-hr_isopleths(mcps) 
+hr_isopleths(mcps)
 # Returns sf object -- useful, e.g., for export to shapefile
 ?st_write
 
@@ -134,14 +134,14 @@ plot(mcps) # Plots all isopleths and adds data on top
 # Since we have access to the sf objects for each polygon, we don't have
 # to rely on the default plotting method if we don't want to.
 
-hr_isopleths(mcps) %>% 
+hr_isopleths(mcps) %>%
   # Make level a factor for discrete color scales
   # Can control order and labels here
-  mutate(level = factor(level, 
+  mutate(level = factor(level,
                         levels = c("1", "0.95", "0.75", "0.5"),
-                        labels = c("100%", "95%", "75%", "50%"))) %>% 
+                        labels = c("100%", "95%", "75%", "50%"))) %>%
   ggplot() +
-  geom_sf(aes(color = level), 
+  geom_sf(aes(color = level),
           fill = NA, linewidth = 2) +
   geom_point(data = mcps$data, aes(x = x_, y = y_),
              color = "gray30", alpha = 0.5) +
@@ -150,7 +150,7 @@ hr_isopleths(mcps) %>%
   scale_color_brewer(name = "MCP Level",
                      palette = "Set1") +
   theme_bw() +
-  theme(legend.position = "bottom", 
+  theme(legend.position = "bottom",
         legend.box.background = element_rect(colour = "black", linewidth = 0.8))
 
 # ... ... LoCoHs ----
@@ -185,11 +185,11 @@ plot(locohs)
 
 # It is hard to tell what's going on with the LoCoH without some shading, since
 # there are multiple polygons and even holes. Let's make a custom plot.
-(locoh_plot <- hr_isopleths(locohs) %>% 
-    mutate(level = fct_rev(factor(level))) %>% 
+(locoh_plot <- hr_isopleths(locohs) %>%
+    mutate(level = fct_rev(factor(level))) %>%
     ggplot() +
     geom_sf(aes(fill = level,
-                color = level), 
+                color = level),
             linewidth = 1) +
     xlab(NULL) +
     ylab(NULL) +
@@ -198,7 +198,7 @@ plot(locohs)
     scale_fill_manual(name = "Isopleth",
                       values = rev(gray.colors(10))) +
     theme_bw() +
-    theme(legend.position = "bottom", 
+    theme(legend.position = "bottom",
           legend.box.background = element_rect(colour = "black", linewidth = 0.8)))
 
 # We can add the points, although they tend to obscure the smaller isopleths
@@ -214,7 +214,7 @@ locoh_plot +
 
 # Kernel density estimation is a solution to a general problem in statistics:
 # how do we estimate a smooth probability density function from a sample of
-# data? It is a problem for continuous distributions and is analogous to 
+# data? It is a problem for continuous distributions and is analogous to
 # choosing the bin size for a histogram.
 
 hist(a01$x_, breaks = 5) # too smooth
@@ -239,7 +239,7 @@ plot(density(a01$x_), main = "Automatic Bandwidth")
 # Choosing a bandwidth is important to the final result, and there are multiple
 # possible methods for doing so.
 
-# Methods currently implemented in `amt` are: 
+# Methods currently implemented in `amt` are:
 #   * 'hr_kde_ref()' -- the reference bandwidth (appropriate for unimodal UDs).
 #   * 'hr_kde_ref_scaled()' -- a scaled version of the reference bandwidth that
 #                             finds the smallest bandwidth that produces a
@@ -300,7 +300,7 @@ ggplot() +
 # ... ... aKDE ----
 
 # The `amt` function 'hr_akde()' provides a very convenient interface
-# to the `ctmm` package. aKDEs are fit in `amt` via a wrapper to the `ctmm` 
+# to the `ctmm` package. aKDEs are fit in `amt` via a wrapper to the `ctmm`
 # functions. Many more details are available here:
 ?ctmm::akde
 
@@ -331,10 +331,10 @@ plot(akdes) # The 3 lines represent the estimate and the confidence bounds
 plot(akdes$akde) # plotting method from `ctmm`
 
 # And we can make a custom plot with ggplot by grabbing the pieces
-hr_isopleths(akdes) %>% 
+hr_isopleths(akdes) %>%
   mutate(type = case_when(
     what == "estimate" ~ "Estimate",
-    TRUE ~ "Conf. Int.")) %>% 
+    TRUE ~ "Conf. Int.")) %>%
   ggplot() +
   geom_raster(data = as.data.frame(akdes$ud, xy = TRUE),
               aes(x = x, y = y, fill = layer)) +
@@ -353,6 +353,11 @@ hr_isopleths(akdes) %>%
   theme_bw()
 
 # Overlap ----
+# ****************
+# ** NOTE ** This code is for your reference, but we will cover overlap
+# in more detail in Module 8
+# ****************
+
 # In this last section, we'll demonstrate the use of hr_overlap().
 
 # Recall the other individuals in our simulated data:
@@ -367,18 +372,18 @@ ggplot(dat, aes(x = x_, y = y_, color = ID, group = ID)) +
 # We can see that A01 and A04 have some overlap.
 
 # Let's fit MCPs with the same isopleths as we did for A01 above.
-a04_mcps <- dat %>% 
-  filter(ID == "A04") %>% 
+a04_mcps <- dat %>%
+  filter(ID == "A04") %>%
   hr_mcp(levels = c(0.50, 0.75, 0.95, 1.00))
 
 # Now we can measure their overlap
 hr_overlap(mcps, a04_mcps)
 
 # Custom plot
-bind_rows(hr_isopleths(mcps) %>% 
+bind_rows(hr_isopleths(mcps) %>%
             mutate(ID = "A01"),
-      hr_isopleths(a04_mcps) %>% 
-        mutate(ID = "A04")) %>% 
+      hr_isopleths(a04_mcps) %>%
+        mutate(ID = "A04")) %>%
   ggplot() +
   geom_sf(aes(color = ID), fill = NA) +
   facet_wrap(~ level)
@@ -387,6 +392,6 @@ bind_rows(hr_isopleths(mcps) %>%
 # after that.
 
 # Measure area of overlap
-sf::st_intersection(hr_isopleths(mcps)[1,], 
-                    hr_isopleths(a04_mcps)[1,]) %>% 
+sf::st_intersection(hr_isopleths(mcps)[1,],
+                    hr_isopleths(a04_mcps)[1,]) %>%
   sf::st_area()
