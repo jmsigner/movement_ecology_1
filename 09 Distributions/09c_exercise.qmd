@@ -1,5 +1,5 @@
 ---
-title: "Exercise 8"
+title: "Exercise 9"
 author:
   - name: Johannes Signer
     orcid: 0000-0002-1771-7775
@@ -10,12 +10,11 @@ format: html
 
 ## Exercise
 
-Create an interactive map of the MCP home ranges of the four fisher. Make sure they are labled with their names (*Hint: make use of the argument `zcol` in `mapview()`). 
+Look again at the data of a dispersing white tail deer that we discussed in the code walkthrough and try to create a similar analysis and plot for the turn-angle distribution. 
 
+Use a von Mises distribution for turn angles.
 
 ## Solution 
-
-First load the data and create a track:
 
 ```{r}
 #| code-fold: true
@@ -25,32 +24,81 @@ First load the data and create a track:
 library(amt)
 library(tidyverse)
 
-data("amt_fisher")
-```
+
+# Load the data
+dat <- read_csv(here::here("data/moll_et_al2021.csv"))
 
 
-Calcualte home ranges
+# Parse date
+dat$t <- mdy_hm(dat$t, tz = "America/Chicago") # This important!
 
-```{r}
-#| code-fold: true
-#| code-summary: "Show solution"
-#| eval: FALSE
+dat <- filter(dat, t >= ymd("2017-11-04"), t <= ymd("2017-11-24"))
+trk <- make_track(dat, x, y, t, crs = 4326)
+trk1 <- trk |> track_resample(rate = minutes(90), tolerance = minutes(10))
 
-dat1 <- amt_fisher |> nest(data = -name) |>
-  mutate(hr = map(data, ~ hr_mcp(., trast = trast, level = c(0.95))))
+trk1 <- trk1 |> transform_coords(32515)
 
-```
+steps <- trk1 |> steps_by_burst() |> # Steps
+  time_of_day(where = "both") # Add time of day
 
-Create a map. 
+# Fitting statistical distributions ----
+
+# Next we can fit a gamma distribution to the steps
+# Day
+day <- fit_distr(
+  steps |> filter(tod_start_ == "day") |> pull(ta_),
+  "vonmises"
+)
+
+night <- fit_distr(
+  steps |> filter(tod_start_ == "night") |> pull(ta_),
+  "vonmises"
+)
+
+day$params
+night$params
+
+res <- tibble(
+  when = c("day", "night"),
+  what = c("kappa", "kappa"),
+  est = c(day$params$kappa, night$params$kappa),
+  se = sqrt(
+    c(day$vcov, night$vcov)
+  )
+)
 
 
-```{r}
-#| code-fold: true
-#| code-summary: "Show solution"
-#| eval: FALSE
+td <- res |> nest(-when) |>
+  mutate(vm = map(data, ~ {
+    tibble(
+      x = seq(-3, 3, len = 250),
+      y = dvonmises(x, mu = 0, kappa = .x$est)
+    )
+  })) |>
+  select(tod_start_ = when, vm) |>
+  unnest(cols = vm)
 
-library(mapview)
-dat1 |> hr_to_sf(hr, name) |> 
-  mapview(zcol = "name")
+# Plotting
+steps |>
+  ggplot(aes(x = ta_)) +
+  geom_density() +
+  geom_line(aes(x = x, y = y), data = td, col = "red") +
+  facet_wrap(~ tod_start_)
+
+
+# ... Derived quantities ----
+# Expected speed
+res |> filter(when == "day") |> pull(est) 
+res |> filter(when == "night") |> pull(est) 
+
+res
+
+
+res |>
+  ggplot(aes(x = when, y = est, ymin = est - 1.96 * se, ymax = est + 1.96 * se)) +
+  geom_pointrange()
+
+
+
 ```
 
