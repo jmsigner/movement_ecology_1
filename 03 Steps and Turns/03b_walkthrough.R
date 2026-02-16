@@ -39,6 +39,7 @@ leroy2 |> steps()
 # points. To overcome this, we can use `steps_by_burst()`.
 
 s2 <- leroy2 |> steps_by_burst()
+print(s2, n = Inf)
 
 # The resulting tibble has 11 columns by default:
 # - `burst_`: the burst number.
@@ -60,9 +61,10 @@ library(terra)
 dem <- get_amt_fisher_covars()$elevation
 
 leroy2 |> extract_covariates(dem)
-leroy2 |> extract_covariates(dem, where = "start")
-leroy2 |> extract_covariates(dem, where = "end")
-leroy2 |> extract_covariates(dem, where = "both")
+
+leroy2 |> steps_by_burst() |> extract_covariates(dem, where = "start")
+leroy2 |> steps_by_burst() |> extract_covariates(dem, where = "end")
+leroy2 |> steps_by_burst() |> extract_covariates(dem, where = "both")
 
 # Get a second covariates
 pop <- get_amt_fisher_covars()$pop
@@ -75,9 +77,9 @@ res(pop)
 # values this is not problem.
 # We can chain the extract covariates function and call it twice.
 
-leroy2 |>
+leroy2 |> steps_by_burst() |>
   extract_covariates(dem) |>
-  extract_covariates(pop)
+  extract_covariates(pop, where = "both")
 
 
 # Time of day ----
@@ -88,7 +90,6 @@ leroy2 |> steps_by_burst() |> time_of_day(where = "end")
 leroy2 |> steps_by_burst() |> time_of_day(where = "both")
 
 # Adding dawn and dusk
-
 leroy2 |> steps_by_burst() |> time_of_day(where = "end", include.crepuscule = TRUE)
 leroy2 |> steps_by_burst() |> time_of_day(where = "end", include.crepuscule = TRUE) |>
   count(tod_end_)
