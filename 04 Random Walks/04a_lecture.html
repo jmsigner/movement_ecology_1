@@ -15,7 +15,7 @@
   <meta name="generator" content="quarto-1.8.27">
 
   <meta name="author" content="Brian J. Smith">
-  <meta name="dcterms.date" content="2026-02-15">
+  <meta name="dcterms.date" content="2026-02-16">
   <title>Random Walks</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -152,7 +152,7 @@ Brian J. Smith <a href="https://orcid.org/0000-0002-0531-0492" class="quarto-tit
     </div>
 </div>
 
-  <p class="date">February 15, 2026</p>
+  <p class="date">February 16, 2026</p>
 </section>
 <section>
 <section id="continuous-vs.-discrete-time" class="title-slide slide level1 center">
@@ -528,6 +528,99 @@ Brian J. Smith <a href="https://orcid.org/0000-0002-0531-0492" class="quarto-tit
 <li>BRW: position function is mean-reverting,</li>
 <li>CRW: velocity function is mean-reverting.</li>
 </ul></li>
+</ul>
+</section></section>
+<section>
+<section id="regularizing-irregular-data" class="title-slide slide level1 center">
+<h1>Regularizing Irregular Data</h1>
+
+</section>
+<section id="regularizing-irregular-data-1" class="slide level2">
+<h2>Regularizing Irregular Data</h2>
+<p>There are many uses for continuous time movement models, but for those of us that typically work in discrete time, one common use is regularizing irregular data.</p>
+<center>
+<p><img src="figs/steps1.png" alt="movement path with steps" width="500px" height="500px"></p>
+</center>
+</section>
+<section id="should-i-regularize" class="slide level2">
+<h2>Should I regularize?</h2>
+<p>Does the analysis you need require it?</p>
+<ul>
+<li>Some analyses assume independent points (HSFs).</li>
+<li>Some analyses that require regular timesteps are agnostic to gaps (iSSA).</li>
+</ul>
+<center>
+<p><img src="figs/steps1_missing.png" alt="movement path with missing step" width="300px" height="300px"></p>
+</center>
+</section>
+<section id="should-i-regularize-1" class="slide level2">
+<h2>Should I regularize?</h2>
+<p>Does the analysis you need require it?</p>
+<ul>
+<li>Some analyses assume independent points (HSFs).</li>
+<li>Some analyses that require regular timesteps are agnostic to gaps (iSSA).</li>
+<li>Some analyses <strong>do require</strong> regular timesteps without gaps (HMM).</li>
+</ul>
+</section>
+<section id="should-i-regularize-2" class="slide level2">
+<h2>Should I regularize?</h2>
+<p>Is your analysis sensitive to “wrong” locations?</p>
+<ul>
+<li><em>E.g.</em>, could it bias your habitat selection analysis?</li>
+<li>By how much?</li>
+</ul>
+</section>
+<section id="section-2" class="slide level2">
+<h2></h2>
+<center>
+<p><img src="figs/steps1.png" alt="movement path with steps" width="600px" height="600px"></p>
+</center>
+</section>
+<section id="section-3" class="slide level2">
+<h2></h2>
+<center>
+<p><img src="figs/steps1_habitat.png" alt="movement path with steps and habitat" width="600px" height="600px"></p>
+</center>
+</section>
+<section id="section-4" class="slide level2">
+<h2></h2>
+<center>
+<p><img src="figs/steps1_habitat_impute1.png" alt="movement path with steps and habitat and correct interpolation" width="600px" height="600px"></p>
+</center>
+</section>
+<section id="section-5" class="slide level2">
+<h2></h2>
+<center>
+<p><img src="figs/steps1_habitat_impute2.png" alt="movement path with steps and habitat and incorrect interpolation" width="600px" height="600px"></p>
+</center>
+</section>
+<section id="multiple-imputation" class="slide level2">
+<h2>Multiple Imputation</h2>
+<p>If you need to interpolate your data, it might be a good idea to use multiple imputation.</p>
+</section>
+<section id="multiple-imputation-1" class="slide level2">
+<h2>Multiple Imputation</h2>
+<center>
+<p><img src="figs/multiple_imputation1.png" alt="multiple imputation figure 1" width="900px" height="500px"></p>
+</center>
+</section>
+<section id="multiple-imputation-2" class="slide level2">
+<h2>Multiple Imputation</h2>
+<center>
+<p><img src="figs/multiple_imputation2.png" alt="multiple imputation figure 2" width="900px" height="500px"></p>
+</center>
+</section>
+<section id="multiple-imputation-3" class="slide level2">
+<h2>Multiple Imputation</h2>
+<center>
+<p><img src="figs/multiple_imputation3.png" alt="multiple imputation figure 3" width="900px" height="500px"></p>
+</center>
+</section>
+<section id="take-home-messages-2" class="slide level2" data-background-color="#0c4869">
+<h2>Take-home Messages</h2>
+<ul>
+<li>Don’t rush to regularize your data if you don’t need to.</li>
+<li>If you need to regularize, consider multiple imputation to consider the uncertainty in the imputed values.</li>
 </ul>
 </section></section>
 <section>

@@ -568,6 +568,119 @@ The models we just covered are those implemented in the R packages `ctmm` and `C
 - Ornstein-Uhlenbeck processes are mean-reverting and can be used to parameterize a:
   - BRW: position function is mean-reverting,
   - CRW: velocity function is mean-reverting.
+  
+# Regularizing Irregular Data
+
+## Regularizing Irregular Data
+
+There are many uses for continuous time movement models, but for those of us that typically work in discrete time, one common use is regularizing irregular data.
+
+<center>
+
+<img src="figs/steps1.png" alt="movement path with steps" width=500px height=500px>
+
+</center>
+
+## Should I regularize?
+
+Does the analysis you need require it?
+
+- Some analyses assume independent points (HSFs).
+- Some analyses that require regular timesteps are agnostic to gaps (iSSA).
+
+<center>
+
+<img src="figs/steps1_missing.png" alt="movement path with missing step" width=300px height=300px>
+
+</center>
+
+
+## Should I regularize?
+
+Does the analysis you need require it?
+
+- Some analyses assume independent points (HSFs).
+- Some analyses that require regular timesteps are agnostic to gaps (iSSA).
+- Some analyses **do require** regular timesteps without gaps (HMM).
+
+
+## Should I regularize?
+
+Is your analysis sensitive to "wrong" locations?
+
+- *E.g.*, could it bias your habitat selection analysis? 
+- By how much?
+
+##
+
+<center>
+
+<img src="figs/steps1.png" alt="movement path with steps" width=600px height=600px>
+
+</center>
+
+##
+
+<center>
+
+<img src="figs/steps1_habitat.png" alt="movement path with steps and habitat" width=600px height=600px>
+
+
+</center>
+
+##
+
+<center>
+
+<img src="figs/steps1_habitat_impute1.png" alt="movement path with steps and habitat and correct interpolation" width=600px height=600px>
+
+</center>
+
+##
+
+<center>
+
+<img src="figs/steps1_habitat_impute2.png" alt="movement path with steps and habitat and incorrect interpolation" width=600px height=600px>
+
+</center>
+
+## Multiple Imputation
+
+If you need to interpolate your data, it might be a good idea to use multiple imputation.
+
+
+## Multiple Imputation
+
+
+<center>
+
+<img src="figs/multiple_imputation1.png" alt="multiple imputation figure 1" width=900px height=500px>
+
+</center>
+
+
+## Multiple Imputation
+
+<center>
+
+<img src="figs/multiple_imputation2.png" alt="multiple imputation figure 2" width=900px height=500px>
+
+</center>
+
+## Multiple Imputation
+
+<center>
+
+<img src="figs/multiple_imputation3.png" alt="multiple imputation figure 3" width=900px height=500px>
+
+</center>
+
+
+## Take-home Messages {background-color="#0c4869"}
+
+- Don't rush to regularize your data if you don't need to.
+- If you need to regularize, consider multiple imputation to consider the uncertainty in the imputed values.
+
 
 # Questions?
 
