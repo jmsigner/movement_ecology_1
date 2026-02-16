@@ -319,19 +319,57 @@ They might estimate the occurrence distribution *or* the range distribution.
 ::: {.column}
 
 
-### Autocorrelated Kernel Density Estimator (aKDE)
+### Autocorrelated Kernel Density Estimator (AKDE)
 
 - Based on an underlying continuous-time movement model.
 - Uses autocorrelation in the movement data to estimate the smoothing parameter.
 - Estimates the **range distribution**.
 
-[ See [Silva et al. 2021](https://doi.org/10.1111/2041-210X.13786) for a recent review and practical guide for aKDE estimation. ]{style="font-size: 70%"}
+[ See [Silva et al. 2021](https://doi.org/10.1111/2041-210X.13786) for a recent review and practical guide for AKDE estimation. ]{style="font-size: 70%"}
 
 :::
 
 ::: {.column}
 
 ![aKDE](figs/akde.png)\
+
+:::
+
+::::
+
+## Autocorrelated Kernel Density Estimator (AKDE) {.smaller}
+
+:::: {.columns}
+
+::: {.column width="45%"}
+
+
+### Model Choices
+
+- The AKDE uses a fitted continuous-time movement model (CTMM) to estimate the utilization distribution.
+- The estimated home range is thus sensitive to the choice of CTMM.
+- The choices available in the R package `ctmm` (and the `amt` wrapper) are models we already covered yesterday:
+  - IID: independent, identically distributed; no autocorrelation
+  - BM: Brownian motion; diffusion
+  - OU: Ornstein-Uhlenbeck; correlated positions
+  - OUF: Ornstein-Uhlenbeck foraging; correlated positions and velocities
+
+:::
+
+::: {.column width="10%"}
+
+::: 
+
+::: {.column width="45%"}
+
+### Fitting Choices
+
+- Fit the model directly with `ctmm`. See `?ctmm`.
+  - Decide on a model and initial parameters.
+  - Otherwise, use `ctmm.select()` for model selection.
+- Fit the model using the `amt` wrapper `hr_akde()`.
+  - Decide on a model and fit it using `amt::fit_ctmm()`.
+  - Or use model selection with  `amt::fit_ctmm(..., model = "auto")`.
 
 :::
 
@@ -364,7 +402,6 @@ They might estimate the occurrence distribution *or* the range distribution.
 ::: {.column}
 
 - Estimates the UD by fitting a Brownian bridge movement model between successive locations.  
-
   - Estimates uncertainty around a step by assuming [Brownian motion](https://en.wikipedia.org/wiki/Brownian_motion) between start and end point.  
   
 [ See Horne et al. (2007) for details. ]{style="font-size: 70%"}
@@ -389,12 +426,10 @@ They might estimate the occurrence distribution *or* the range distribution.
 ::: {.column}
 
 - Estimates the UD by fitting a Brownian bridge movement model between successive locations.  
-
-  - Extensions allow multiple movement modes (Dynamic BBMM;[ Kranstauber et al. 2012](https://doi.org/10.1111/j.1365-2656.2012.01955.x)) and covariates (BBCM; [Kranstauber 2019](https://doi.org/10.1186/s40462-019-0167-3)).  
-  
+  - Extensions allow multiple movement modes (Dynamic BBMM; [Kranstauber et al. 2012](https://doi.org/10.1111/j.1365-2656.2012.01955.x)) and covariates (BBCM;  [Kranstauber 2019](https://doi.org/10.1186/s40462-019-0167-3)).  
   - Fit using `R` packages `adehabitatHR` or `move`.
-  
   - Probabilistic estimator.
+  - Occurrence distribution.
 
 :::
 

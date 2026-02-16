@@ -382,16 +382,50 @@ Brian J. Smith <a href="https://orcid.org/0000-0002-0531-0492" class="quarto-tit
 <h2>Probabilistic Estimators</h2>
 <div class="columns">
 <div class="column">
-<h3 id="autocorrelated-kernel-density-estimator-akde">Autocorrelated Kernel Density Estimator (aKDE)</h3>
+<h3 id="autocorrelated-kernel-density-estimator-akde">Autocorrelated Kernel Density Estimator (AKDE)</h3>
 <ul>
 <li>Based on an underlying continuous-time movement model.</li>
 <li>Uses autocorrelation in the movement data to estimate the smoothing parameter.</li>
 <li>Estimates the <strong>range distribution</strong>.</li>
 </ul>
-<p><span style="font-size: 70%">See <a href="https://doi.org/10.1111/2041-210X.13786">Silva et al.&nbsp;2021</a> for a recent review and practical guide for aKDE estimation.</span></p>
+<p><span style="font-size: 70%">See <a href="https://doi.org/10.1111/2041-210X.13786">Silva et al.&nbsp;2021</a> for a recent review and practical guide for AKDE estimation.</span></p>
 </div><div class="column">
 <p><img data-src="figs/akde.png" alt="aKDE"><br>
 </p>
+</div></div>
+</section>
+<section id="autocorrelated-kernel-density-estimator-akde-1" class="slide level2 smaller">
+<h2>Autocorrelated Kernel Density Estimator (AKDE)</h2>
+<div class="columns">
+<div class="column" style="width:45%;">
+<h3 id="model-choices">Model Choices</h3>
+<ul>
+<li>The AKDE uses a fitted continuous-time movement model (CTMM) to estimate the utilization distribution.</li>
+<li>The estimated home range is thus sensitive to the choice of CTMM.</li>
+<li>The choices available in the R package <code>ctmm</code> (and the <code>amt</code> wrapper) are models we already covered yesterday:
+<ul>
+<li>IID: independent, identically distributed; no autocorrelation</li>
+<li>BM: Brownian motion; diffusion</li>
+<li>OU: Ornstein-Uhlenbeck; correlated positions</li>
+<li>OUF: Ornstein-Uhlenbeck foraging; correlated positions and velocities</li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:10%;">
+
+</div><div class="column" style="width:45%;">
+<h3 id="fitting-choices">Fitting Choices</h3>
+<ul>
+<li>Fit the model directly with <code>ctmm</code>. See <code>?ctmm</code>.
+<ul>
+<li>Decide on a model and initial parameters.</li>
+<li>Otherwise, use <code>ctmm.select()</code> for model selection.</li>
+</ul></li>
+<li>Fit the model using the <code>amt</code> wrapper <code>hr_akde()</code>.
+<ul>
+<li>Decide on a model and fit it using <code>amt::fit_ctmm()</code>.</li>
+<li>Or use model selection with <code>amt::fit_ctmm(..., model = "auto")</code>.</li>
+</ul></li>
+</ul>
 </div></div>
 </section>
 <section id="take-home-messages-1" class="slide level2" data-background-color="#0c4869">
@@ -422,7 +456,7 @@ Brian J. Smith <a href="https://orcid.org/0000-0002-0531-0492" class="quarto-tit
 <div class="columns">
 <div class="column">
 <ul>
-<li><p>Estimates the UD by fitting a Brownian bridge movement model between successive locations.</p>
+<li>Estimates the UD by fitting a Brownian bridge movement model between successive locations.
 <ul>
 <li>Estimates uncertainty around a step by assuming <a href="https://en.wikipedia.org/wiki/Brownian_motion">Brownian motion</a> between start and end point.</li>
 </ul></li>
@@ -440,11 +474,13 @@ Brian J. Smith <a href="https://orcid.org/0000-0002-0531-0492" class="quarto-tit
 <div class="columns">
 <div class="column">
 <ul>
-<li><p>Estimates the UD by fitting a Brownian bridge movement model between successive locations.</p>
+<li>Estimates the UD by fitting a Brownian bridge movement model between successive locations.
 <ul>
-<li><p>Extensions allow multiple movement modes (Dynamic BBMM;<a href="https://doi.org/10.1111/j.1365-2656.2012.01955.x">Kranstauber et al.&nbsp;2012</a>) and covariates (BBCM; <a href="https://doi.org/10.1186/s40462-019-0167-3">Kranstauber 2019</a>).</p></li>
-<li><p>Fit using <code>R</code> packages <code>adehabitatHR</code> or <code>move</code>.</p></li>
-<li><p>Probabilistic estimator.</p></li>
+<li>Extensions allow multiple movement modes (Dynamic BBMM; <a href="https://doi.org/10.1111/j.1365-2656.2012.01955.x">Kranstauber et al.&nbsp;2012</a>) and covariates (BBCM; <a href="https://doi.org/10.1186/s40462-019-0167-3">Kranstauber 2019</a>).<br>
+</li>
+<li>Fit using <code>R</code> packages <code>adehabitatHR</code> or <code>move</code>.</li>
+<li>Probabilistic estimator.</li>
+<li>Occurrence distribution.</li>
 </ul></li>
 </ul>
 </div><div class="column">
