@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <br>
 
-Let's apply what we've learned about data cleaning. Refer to the lecture slides (<a href="04a_lecture.html" target="_blank" rel="noopener noreferrer">04a_lecture.html</a>) and the walkthrough code (`04b_walkthrough.R`) as a refresher.
+Let's apply what we've learned about random walks. Refer to the lecture slides (<a href="04a_lecture.html" target="_blank" rel="noopener noreferrer">04a_lecture.html</a>) and the walkthrough code (`04b_walkthrough.R`) as a refresher.
 
 This exercise doesn't require any data. However, you might want to think about your own data or a system you are familiar with. Your task is to change parameters in the simulations to understand the models more generally.
 
