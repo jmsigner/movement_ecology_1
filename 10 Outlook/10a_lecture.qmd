@@ -1,0 +1,102 @@
+---
+title: "Outlook"
+subtitle: "Analysis of Animal Movement Data with R"
+format: 
+  clean-revealjs:
+    progress: true
+    code-line-numbers: false
+author:
+  - name: Brian J. Smith
+    orcid: 0000-0002-0531-0492
+    email: brian.smith@usu.edu
+    affiliations: Utah State University
+  - name: Johannes Signer
+    orcid: 0000-0002-1771-7775
+    email: jmsigner@gmail.com
+    affiliations: University of Göttingen, Germany & Freelancer
+date: last-modified
+execute:
+  echo: true
+  warning: false
+  message: false
+filters: 
+  - timer
+revealjs-plugins:
+  - codefocus
+---
+
+```{r setup}
+#| include: false
+library(tidyverse)
+library(amt)
+
+knitr::opts_knit$set(
+  root.dir = here::here("10 Outlook/")
+)
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.height = 4.5,
+  fig.width = 4.5
+)
+```
+
+
+# Habitat Selection: Resource/Habitat Selection Analysis (R/HSA)
+
+## What is it about
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+:::
+
+::: {.column width="50%"}
+
+![](img/florko_rsf_2025.png)
+:::
+
+::::
+
+## A typical use case
+
+## What tools do you need
+
+- R alone is sufficient, since you can estimate coefficients using a Generalized Linear Regression with a logit-link function. 
+- `amt` can help to create the data. For example, you need to create random points within the availability domain. 
+- `amt` can help with calcualting relative selection strength (RSS) a measure to quantify selection. 
+
+## Challenges
+
+- Correct interpretation of the selection coefficients can be challenging. 
+
+# SSA
+
+# HMM
+
+## What is it about
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+:::
+
+::: {.column width="50%"}
+
+![](img/florko_hmm_2025.png)
+
+:::
+
+::::
+
+## A typical use case
+
+## What tools do you need
+
+- `moveHMM`, `momentuHMM` and more recently `hmmTMB`. 
+
+# Migration Mapping
