@@ -155,7 +155,7 @@ bib <- ReadBib(here::here("06 Home Ranges/", "06_refs.bib"))
 :::: {.columns}
 
 ::: {.column}
-.pull-left[
+
 We will illustrate some geometric and probabilistic estimators using example data from a published dataset on fishers (*Pekania pennanti*) from New York, USA (LaPoint et al. 2013).
 
 ![fisher](figs/fisher.png)\
@@ -461,7 +461,7 @@ They might estimate the occurrence distribution *or* the range distribution.
 
 ::::
 
-## T-LoCoH
+## T-LoCoH Home Ranges
 
 :::: {.columns}
 
