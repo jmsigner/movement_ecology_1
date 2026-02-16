@@ -1,0 +1,31 @@
+---
+title: "Random Walk Exercise"
+author: 
+  - name: Brian J. Smith
+    orcid: 0000-0002-0531-0492
+    email: brian.smith@usu.edu
+date: last-modified
+format: html
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<br>
+
+Let's apply what we've learned about data cleaning. Refer to the lecture slides (<a href="04a_lecture.html" target="_blank" rel="noopener noreferrer">04a_lecture.html</a>) and the walkthrough code (`04b_walkthrough.R`) as a refresher.
+
+This exercise doesn't require any data. However, you might want to think about your own data or a system you are familiar with. Your task is to change parameters in the simulations to understand the models more generally.
+
+## Instructions
+
+1. Start with a pure random walk (RW). Using the code from `04b_walkthrough.R`, simulate 15 individuals all starting at the same place (but don't use the same random seed each time).
+  - *Hint*: try using `lapply()` or write a nested `for` loop.
+  - What do you see?
+  
+2. Now examine the correlated random walk (CRW). Change the concentration parameter of the von Mises distribution. Try values close to 0 or much larger numbers.
+  - What do you notice about the track?
+  - What do you notice about the autocorrelation function (ACF)? 
+  
+
