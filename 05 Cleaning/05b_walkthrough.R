@@ -1,7 +1,7 @@
 #######################################################X
 #----Analysis of Animal Movement Data in R Workshop----X
-#--------------Module 02 -- Data Cleaning--------------X
-#----------------Last updated 2023-03-12---------------X
+#--------------Module 05 -- Data Cleaning--------------X
+#----------------Last updated 2026-02-15---------------X
 #-------------------Code Walkthrough-------------------X
 #######################################################X
 
@@ -11,12 +11,12 @@ library(mvtnorm)
 library(amt)
 
 # Generate real data ----
-# We need to generate some location data for analysis here. We will use a 
+# We need to generate some location data for analysis here. We will use a
 # pure random walk, where each new location is drawn from a bivariate normal
 # distribution with the previous location as its mean.
 
-# We'll generate data for 1 individuals in the Bear River mountains 
-# just east of Logan, UT. We'll assume our spatial coordinates are in 
+# We'll generate data for 1 individuals in the Bear River mountains
+# just east of Logan, UT. We'll assume our spatial coordinates are in
 # UTMs (zone 12).
 
 start <- c("x" = 446589, "y" = 4625899)
@@ -52,7 +52,7 @@ real_dat$t <- as.POSIXct("2021-06-20 12:00:00") +
 # These are good locations, so keep DOP small
 real_dat$dop <- runif(n = n_loc,
                       min = 1.2,
-                      max = 3.5) %>% 
+                      max = 3.5) %>%
   round(1)
 
 # Add a bit of noise to our otherwise perfect timestamps
@@ -67,7 +67,7 @@ head(real_dat)
 tail(real_dat)
 
 # Format as 'track_xyt' for `amt`
-real_trk <- real_dat %>% 
+real_trk <- real_dat %>%
   make_track(x, y, t, truth = truth, crs = 32612)
 
 # Plot locations
@@ -86,7 +86,7 @@ legend("topright", legend = c("Start", "End"),
 
 # ... 1. Locations before deployment ----
 
-# My office is in the Natural Resources building on the campus of Utah State 
+# My office is in the Natural Resources building on the campus of Utah State
 # University. Here are the coordinates for the building:
 office <- c(432702, 4621579)
 
@@ -110,7 +110,7 @@ office_dat$t <- office_times
 # These are probably indoors and may not get good reception
 office_dat$dop <- runif(n = nrow(office_dat),
                         min = 6,
-                        max = 8) %>% 
+                        max = 8) %>%
   round(1)
 
 # Add a column for the truth
@@ -144,7 +144,7 @@ deployment_dat$t <- deployment_times
 # We'll assume these are decent locations
 deployment_dat$dop <- runif(n = nrow(deployment_dat),
                             min = 2,
-                            max = 5) %>% 
+                            max = 5) %>%
   round(1)
 
 # Add column for the truth
@@ -173,17 +173,17 @@ real_dat2 <- real_dat[-lq_rows, ]
 # Make the DOP large
 lq_dat$dop <- runif(n = nrow(lq_dat),
                     min = 10,
-                    max = 12) %>% 
+                    max = 12) %>%
   round(1)
 
 # Add location error
 lq_dat$x <- rnorm(n = nrow(lq_dat),
-                  mean = lq_dat$x, 
+                  mean = lq_dat$x,
                   # Note that DOP is a multiplier of the SD
                   sd = (lq_dat$dop * 25))
 
 lq_dat$y <- rnorm(n = nrow(lq_dat),
-                  mean = lq_dat$y, 
+                  mean = lq_dat$y,
                   # Note that DOP is a multiplier of the SD
                   sd = (lq_dat$dop * 25))
 
@@ -209,24 +209,24 @@ dup_dat <- real_dat2[dup_rows, ]
 # Make the DOP larger than the real data (but not unacceptable)
 dup_dat$dop <- runif(n = nrow(dup_dat),
                      min = 6,
-                     max = 8) %>% 
+                     max = 8) %>%
   round(1)
 
 # Add location error
 dup_dat$x <- rnorm(n = nrow(dup_dat),
-                   mean = dup_dat$x, 
+                   mean = dup_dat$x,
                    # Note that DOP is a multiplier of the SD
                    # Also note that we're using SD, not variance here
                    sd = (dup_dat$dop * 25))
 
 dup_dat$y <- rnorm(n = nrow(dup_dat),
-                   mean = dup_dat$y, 
+                   mean = dup_dat$y,
                    # Note that DOP is a multiplier of the SD
                    # Also note that we're using SD, not variance here
                    sd = (dup_dat$dop * 25))
 
 # Jitter the timestamp by a few seconds
-dup_dat$t <- dup_dat$t + 
+dup_dat$t <- dup_dat$t +
   round(runif(n = nrow(dup_dat),
               min = -30,
               max = 15))
@@ -247,8 +247,8 @@ head(dup_dat)
 # Let's look at quick examples:
 #   (1.) Use the biology of our organism.
 #         E.g., a cheetah can run 100 km/h, but only for 60 seconds
-(cheetah_sdr <- calculate_sdr(speed = 100, 
-                              time = minutes(1), 
+(cheetah_sdr <- calculate_sdr(speed = 100,
+                              time = minutes(1),
                               speed_unit = "km/h"))
 # What does this imply for a 1-hour step?
 # (divide by 1000 to get km)
@@ -260,7 +260,7 @@ sdr(real_trk)
 # Let's look at a histogram
 hist(sdr(real_trk), breaks = 30)
 
-# We can see a break after an SDR of 2500 m^2/s 
+# We can see a break after an SDR of 2500 m^2/s
 # (even though there is a real data point with ~ 4000 m^2/s).
 
 # Let's make our SDR cutoff 3000.
@@ -274,7 +274,7 @@ get_displacement(delta, hours(1)) # >3 km
 
 # Let's pick the 10 steps that already have an SDR between 1800 and 2500
 # BUT aren't already low quality replacements or duplicates
-fast_step_rows <- which(sdr(real_trk) > 1700 & 
+fast_step_rows <- which(sdr(real_trk) > 1700 &
                           sdr(real_trk) < 2500)
 # Are any of these already low-quality replacements
 sum(fast_step_rows %in% lq_rows)
@@ -297,19 +297,19 @@ for (i in 1:length(fast_step_rows)) {
   # Figure out if real step is +/-
   dir_x <- (c$x - p$x)/abs(c$x - p$x)
   dir_y <- (c$y - p$y)/abs(c$y - p$y)
-  
+
   # Template for new location
   n <- c
-  
+
   # Add 5 km to each location by adding +/- 3k to x and +/- 4k to y
   n$x <- c$x + dir_x * 3000
   n$y <- c$y + dir_y * 4000
   # New DOP
-  n$dop <- runif(n = 1, min = 6, max = 8) %>% 
+  n$dop <- runif(n = 1, min = 6, max = 8) %>%
     round(1)
   # New truth
   n$truth <- "fast_step"
-  
+
   # Replace new row into data
   fast_step_dat[i, ] <- n[1,]
 }
@@ -342,7 +342,7 @@ rt_dat$y <- rt_dat$y + 3000
 
 # Lower the DOP
 rt_dat$dop <- runif(n = nrow(rt_dat),
-                    min = 6, max = 8) %>% 
+                    min = 6, max = 8) %>%
   round(1)
 
 # Update the truth
@@ -372,7 +372,7 @@ drop_dat$t <- drop_times
 # We'll assume these are decent locations
 drop_dat$dop <- runif(n = nrow(drop_dat),
                       min = 2,
-                      max = 5) %>% 
+                      max = 5) %>%
   round(1)
 
 # Add column for the truth
@@ -391,11 +391,11 @@ real_dat3 <- real_dat[-c(fast_step_rows, lq_rows, rt_rows), ]
 dat <- rbind(real_dat3,
              office_dat,
              deployment_dat,
-             lq_dat, 
+             lq_dat,
              dup_dat,
              fast_step_dat,
              rt_dat,
-             drop_dat) %>% 
+             drop_dat) %>%
   # Sort by timestamp
   arrange(t)
 
@@ -409,34 +409,34 @@ table(dat$truth)
 # looks like with real data.
 
 # First, convert our real data to a track_xyt.
-trk <- dat %>% 
+trk <- dat %>%
   make_track(x, y, t, dop = dop, truth = truth, crs = 32612)
 
 # Now we plot it
 plot(trk, main = "Simulated Dataset")
 lines(trk)
 
-# Because we know what the "real" data look like, we can see some of the 
+# Because we know what the "real" data look like, we can see some of the
 # errors here already. But note that they really aren't that obvious most
 # of the time!
 
 # We can also take a look on a map.
-trk %>% 
+trk %>%
   inspect()
 
 # Now we start the cleaning process.
 
 # ... 1. pre-deployment ----
-# Recall we deployed our tag on 17 June at 11:00 and picked it up on 
+# Recall we deployed our tag on 17 June at 11:00 and picked it up on
 # 18 July at 08:00.
-trk2 <- trk %>% 
+trk2 <- trk %>%
   tracked_from_to(from = as.POSIXct("2021-06-17 11:00"),
                   to = as.POSIXct("2021-07-18 08:00"))
 
 # ... 2. capture effect ----
 # Recall that we said that previous research showed the capture effect can last
 # up to 3 days in our study species.
-trk3 <- trk2 %>% 
+trk3 <- trk2 %>%
   remove_capture_effect(start = days(3))
 
 # How did we do?
@@ -457,7 +457,7 @@ hist(trk3$dop)
 # but on a real dataset, I would think about removing > 6.
 
 # Recall, there is no amt function here. All we need is dplyr::filter().
-trk4 <- trk3 %>% 
+trk4 <- trk3 %>%
   filter(dop < 10)
 
 # ... 5. Low-quality duplicates ----
@@ -467,21 +467,21 @@ summarize_sampling_rate(trk4)
 # We're pretty consistent with our 1 hour fixes, but the min is very small.
 sort(diff(trk4$t_))
 
-# If we set gamma to 1 minute, we'd catch all of our duplicates. For 
+# If we set gamma to 1 minute, we'd catch all of our duplicates. For
 # hourly data, much larger values are still safe.
 
 # Note that this operation takes a long time on large datasets.
-trk5 <- trk4 %>% 
+trk5 <- trk4 %>%
   flag_duplicates(gamma = minutes(5))
 
 # Recall that this function just flags duplicates -- you may decide you didn't
 # like your gamma parameter and want to try again. Let's look.
-trk5 %>% 
+trk5 %>%
   filter(duplicate_)
 
 # You can see we did a good job of finding our "true" duplicates here.
 # Let's remove them.
-trk5 <- trk5 %>% 
+trk5 <- trk5 %>%
   filter(!duplicate_)
 
 # ... 6. Unreasonably fast steps ----
@@ -490,11 +490,11 @@ trk5 <- trk5 %>%
 hist(sdr(trk5), breaks = 30)
 
 # We see a big drop off by the time we get to SDR = 5000. Let's use that.
-trk6 <- trk5 %>% 
+trk6 <- trk5 %>%
   flag_fast_steps(delta = 5000)
 
 # How did we do?
-trk6 %>% 
+trk6 %>%
   filter(fast_step_)
 
 # We're going to remove a couple of "real" locations and a "fast_rt" location,
@@ -502,7 +502,7 @@ trk6 %>%
 # for the sake of cleaning out bad ones.
 
 # Get rid of them
-trk6 <- trk6 %>% 
+trk6 <- trk6 %>%
   filter(!fast_step_)
 
 # ... 7. Fast roundtrips ----
@@ -511,38 +511,38 @@ trk6 <- trk6 %>%
 # how many steps you flag.
 
 # epsilon = 1
-trk7a <- trk6 %>% 
+trk7a <- trk6 %>%
   flag_roundtrips(delta = 5000, epsilon = 1)
 # How many?
-trk7a %>% 
+trk7a %>%
   filter(fast_roundtrip_)
 
 # epsilon = 3
-trk7b <- trk6 %>% 
+trk7b <- trk6 %>%
   flag_roundtrips(delta = 5000, epsilon = 3)
 # How many?
-trk7b %>% 
+trk7b %>%
   filter(fast_roundtrip_)
 
 # epsilon = 5
-trk7c <- trk6 %>% 
+trk7c <- trk6 %>%
   flag_roundtrips(delta = 5000, epsilon = 5)
 # How many?
-trk7c %>% 
+trk7c %>%
   filter(fast_roundtrip_)
 
 # epsilon = 10
-trk7d <- trk6 %>% 
+trk7d <- trk6 %>%
   flag_roundtrips(delta = 5000, epsilon = 10)
 # How many?
-trk7d %>% 
+trk7d %>%
   filter(fast_roundtrip_)
 
 # epsilon = 3 was the best for us (because we know the truth)
 # If we didn't, we would need to do a lot more examining of our tracks to know
 # that we would be removing a lot of real points with larger epsilons
 
-trk7 <- trk7b %>% 
+trk7 <- trk7b %>%
   filter(!fast_roundtrip_)
 
 # ... 8. Defunct clusters ----
@@ -560,53 +560,53 @@ lines(lasts)
 # 25. Again, we can check what really gets flagged and adjust if necessary.
 
 # Try zeta = 25
-trk8a <- trk7 %>% 
+trk8a <- trk7 %>%
   flag_defunct_clusters(zeta = 25,
                         eta = 24,
                         theta = hours(24))
 
-trk8a %>% 
-  filter(defunct_cluster_) %>% 
+trk8a %>%
+  filter(defunct_cluster_) %>%
   plot()
 
 # Try zeta = 50
-trk8b <- trk7 %>% 
+trk8b <- trk7 %>%
   flag_defunct_clusters(zeta = 50,
                         eta = 24,
                         theta = hours(24))
 
-trk8b %>% 
-  filter(defunct_cluster_) %>% 
+trk8b %>%
+  filter(defunct_cluster_) %>%
   plot()
 
 # Try zeta = 100
-trk8c <- trk7 %>% 
+trk8c <- trk7 %>%
   flag_defunct_clusters(zeta = 100,
                         eta = 24,
                         theta = hours(24))
 
-trk8c %>% 
-  filter(defunct_cluster_) %>% 
+trk8c %>%
+  filter(defunct_cluster_) %>%
   plot()
 
 # Try zeta = 200
-trk8d <- trk7 %>% 
+trk8d <- trk7 %>%
   flag_defunct_clusters(zeta = 200,
                         eta = 24,
                         theta = hours(24))
 
-trk8d %>% 
-  filter(defunct_cluster_) %>% 
+trk8d %>%
+  filter(defunct_cluster_) %>%
   plot()
 
 # Try zeta = 4000
-trk8e <- trk7 %>% 
+trk8e <- trk7 %>%
   flag_defunct_clusters(zeta = 4000,
                         eta = 24,
                         theta = hours(24))
 
-trk8e %>% 
-  filter(defunct_cluster_) %>% 
+trk8e %>%
+  filter(defunct_cluster_) %>%
   plot()
 
 # We can see that zeta = 25 is too small.
@@ -614,7 +614,7 @@ trk8e %>%
 # But if we make zeta = 4000, we start getting some movement data
 
 # 50 was fine, we'll keep it.
-final <- trk8b %>% 
+final <- trk8b %>%
   filter(!defunct_cluster_)
 
 # ... how did we do? ----
@@ -624,7 +624,7 @@ table(final$truth)
 # and no other classes.
 
 # We lost just a few real locations and kept just a couple of erroneous
-# locations. 
+# locations.
 
 # This is a very likely outcome with real data. The point is to do our best
 # to try to make our cleaning process reproducible and our answers robust
@@ -633,31 +633,31 @@ table(final$truth)
 # Piped workflow ----
 # Lastly, let's see this all at once.
 
-final2 <- trk %>% 
+final2 <- trk %>%
   # Step 1
   tracked_from_to(from = as.POSIXct("2021-06-17 11:00"),
-                  to = as.POSIXct("2021-07-18 08:00")) %>% 
+                  to = as.POSIXct("2021-07-18 08:00")) %>%
   # Step 2
-  remove_capture_effect(start = days(3)) %>% 
+  remove_capture_effect(start = days(3)) %>%
   # Step 4
-  filter(dop < 10) %>% 
+  filter(dop < 10) %>%
   # Step 5
-  flag_duplicates(gamma = minutes(5)) %>% 
-  filter(!duplicate_) %>% 
+  flag_duplicates(gamma = minutes(5)) %>%
+  filter(!duplicate_) %>%
   # Step 6
-  flag_fast_steps(delta = 5000) %>% 
-  filter(!fast_step_) %>% 
+  flag_fast_steps(delta = 5000) %>%
+  filter(!fast_step_) %>%
   # Step 7
-  flag_roundtrips(delta = 5000, epsilon = 3) %>% 
-  filter(!fast_roundtrip_) %>% 
+  flag_roundtrips(delta = 5000, epsilon = 3) %>%
+  filter(!fast_roundtrip_) %>%
   # Step 8
   flag_defunct_clusters(zeta = 50,
                         eta = 24,
-                        theta = hours(24)) %>% 
+                        theta = hours(24)) %>%
   filter(!defunct_cluster_)
 
 # Identical?
-identical(final, final2)  
+identical(final, final2)
 
 # Now we're ready to move on to data analysis!
 

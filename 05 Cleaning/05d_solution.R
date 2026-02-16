@@ -1,6 +1,6 @@
 #######################################################X
 #----Analysis of Animal Movement Data in R Workshop----X
-#--------------Module 02 -- Data Cleaning--------------X
+#--------------Module 05 -- Data Cleaning--------------X
 #----------------Last updated 2022-11-13---------------X
 #-------------------Exercise Solution------------------X
 #######################################################X
@@ -12,13 +12,13 @@ library(tidyverse)
 library(amt)
 
 # Part 1 ----
-# Load in your data or the `amt_fisher` dataset. If you're working with your 
+# Load in your data or the `amt_fisher` dataset. If you're working with your
 # own data, format it as a `track_xyt` object using `amt::make_track()`.
-dat <- amt_fisher %>% 
+dat <- amt_fisher %>%
   filter(name == "Ricky T")
 
 # Part 2 ----
-# Clean these data! 
+# Clean these data!
 
 # ... Quick explore ----
 # Plot locations
@@ -51,8 +51,8 @@ hist(sdr(dat), breaks = 30)
 
 # Really hard to see a break here, so let's get rid of the SDRs less than 250
 # and look again.
-big_sdr <- dat %>% 
-  mutate(sdr = sdr(.)) %>% 
+big_sdr <- dat %>%
+  mutate(sdr = sdr(.)) %>%
   filter(sdr > 250)
 hist(big_sdr$sdr, breaks = 30)
 
@@ -64,17 +64,17 @@ delta <- 500
 get_displacement(delta, hours(1)) # Over 1.3 km.
 
 # ... clean ----
-clean <- dat %>% 
+clean <- dat %>%
   # Step 2
-  remove_capture_effect(start = days(3)) %>% 
+  remove_capture_effect(start = days(3)) %>%
   # Step 5
-  flag_duplicates(gamma = minutes(1), DOP = "dop") %>% 
-  filter(!duplicate_) %>% 
+  flag_duplicates(gamma = minutes(1), DOP = "dop") %>%
+  filter(!duplicate_) %>%
   # Step 6
-  flag_fast_steps(delta = delta) %>% 
-  filter(!fast_step_) %>% 
+  flag_fast_steps(delta = delta) %>%
+  filter(!fast_step_) %>%
   # Step 7
-  flag_roundtrips(delta = delta, epsilon = 3) %>% 
+  flag_roundtrips(delta = delta, epsilon = 3) %>%
   filter(!fast_roundtrip_)
 
 # How many points did we clean?
