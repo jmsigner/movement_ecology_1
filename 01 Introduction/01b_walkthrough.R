@@ -11,7 +11,7 @@ library(amt)
 library(lubridate) # to deal with date and time
 
 # Load data ---- We will use data from fishers that were tracked by Scott
-# LaPoint and has been widely used for many methodological comparisons, examples
+# LaPoint and have been widely used for many methodological comparisons, examples
 # etc. The data is saved in a `csv`-file in the data directory. Telemetry data
 # are stored in many different formats, but often as some kind of text files.
 
@@ -59,7 +59,7 @@ head(dat1$t_)
 
 # Create tracks ----
 
-# The basic building block of to work with the `amt` package are so called
+# The basic building block to work with the `amt` package are so called
 # tracks. A track consists of a series of relocations. The function
 # `make_track()` is used to create a track from a `data.frame` or `tibble`. It
 # expects at least the data set, and coordinates (x and y). Optionally time
@@ -69,12 +69,12 @@ head(dat1$t_)
 make_track(dat, x_, y_, ts)
 
 # Note, that a track is characterized by `x_`, `y_` and `t_`. We could add a crs
-# using the crs argument using the the EPSG code.
+# using the crs argument with the EPSG code.
 
 make_track(dat, x_, y_, ts, crs = 5070)
 dat$name
 
-# If we want to retain the name column. There is also the argument `all_cols`
+# If we want to retain the name column. There is also the argument `all_cols`,
 # which will keep all columns.
 tr <- make_track(dat, x_, y_, ts, name = name, crs = 5070)
 tr

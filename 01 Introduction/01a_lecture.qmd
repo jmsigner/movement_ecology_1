@@ -84,7 +84,7 @@ knitr::opts_chunk$set(
 
 ### Day 2
 5. Detecting and handling outliers	(B)
-6. Home ranges concepts and tools and akde	(B)
+6. Home ranges concepts and tools and aKDE	(B)
 7. Handling multiple animals (J)
 
 :::
@@ -107,18 +107,18 @@ knitr::opts_chunk$set(
 ## Some logistics
 
 - Three days (Monday to Wednesday) from 14:00 to 18:00 Berlin time.
-- We split these 4h block into 3 - 4 chunks, each roughly structured like this: 
+- We split these 4-hour block into 3 - 4 chunks, each roughly structured like this: 
   - Lecture ~ 30 min
   - R walkthrough ~ 20 min
   - Introduction of exercises ~ 5 min
-- A 20 min break between approx. from 15:50 to 16:10.
+- A 20 min break approx. from 15:50 to 16:10.
 
 ------
     
 - Lectures will be held via zoom.
 - During the whole workshop we have a slack channel where you ask questions (we will monitor the channel during the course, feel free to ask questions there also outside the course hours).
 
-- All course material are available here: <https://github.com/jmsigner/movement_ecology_1>
+- All course material is available here: <https://github.com/jmsigner/movement_ecology_1>
 
 ::: {.notes}
 Say that you can download the whole repo in one go or clone it. 
@@ -133,7 +133,7 @@ Say that you can download the whole repo in one go or clone it.
 # Some conventions in R
 
 - `%>%` or `|>`: Pipes the output of one function to a next function. We will discuss this further later on. 
-- `::` to access a name space form a package. 
+- `::` to access a namespace form a package. 
 - `data.frame` or `tibble`?
 
 ::: {.fragment}
@@ -147,7 +147,7 @@ here::here()
 ```
 
 :::: {.notes}
-This means, eventhough our computers differs, relative to the project root, we all have the same directory structure. 
+This means, even though our computers differ, relative to the project root, we all have the same directory structure. 
 ::::
 
 :::
@@ -161,7 +161,7 @@ This means, eventhough our computers differs, relative to the project root, we a
 3. Analysis: doing the actual analysis
 
 ::: {.notes}
-1. Preprocessing: E.g., Global Location Sensos only provide light intensity. Brian will talk about this a bit next. 
+1. Preprocessing: E.g., Global Location Sensors only provide light intensity. Brian will talk about this a bit next. 
 2. We will talk about this tomorrow (-> how to find locations that are unreasonable). 
 3. Home ranges etc..
 :::
@@ -175,7 +175,7 @@ For more see [Joo et al. 2020](https://besjournals.onlinelibrary.wiley.com/doi/f
 
 :::{.notes}
 - First we obtain raw data, that is later being processed. 
-- Than we use tracking data and so on
+- Then we use tracking data and so on
 - Finally, we want to achieve something. 
 :::
 
@@ -202,18 +202,18 @@ For more see [Joo et al. 2020](https://besjournals.onlinelibrary.wiley.com/doi/f
 ::: {.incremental}
 - The CRS defines the reference system that is being used to explicitly reference a feature in space. 
 - There are two classes of CRS: **geographic** (e.g., WGS84) and **projected** (e.g., UTM) CRS. 
-- Projected CRS flatten the three dimensional data to the a two-dimensional plane (and introduce some distortion).
+- Projected CRS flatten three dimensional data to a two-dimensional plane (and introduce some distortion).
 - CRS are often referred to with their EPSG[^1] code.
-- EPSG codes are four to five digits number that refer to different CRS. See for example <www.epsg.io>.
+- EPSG codes are four- to five-digits number that refer to different CRS. See for example <www.epsg.io>.
 - Which CRS is best to use? It depends on the range of the study species. I usually prefer projected CRS, because their units are meters and not degrees. 
 :::
 
 
-[^1]:[EPSG stands for European Petrol Survey Group, who came up with the system]{.fragment}
+[^1]:[EPSG stands for European Petroleum Survey Group, who came up with the system]{.fragment}
 
 ## Environmental covariates 
 
-In addition to movement data, we often want to annotate them with environmental data ofte as:
+In addition to movement data, we often want to annotate them with environmental data often as:
 
 - Vector layers (e.g., road networks, rivers, protected areas)
 - Raster layers (e.g., land use, remotely sensed data such as NDVI, climatic variables)
@@ -236,7 +236,7 @@ knitr::include_graphics(here::here("01 Introduction/img/relocs.png"))
 :::
 
 
-## Reading prepcossed movement data in R
+## Reading preprocessed movement data in R
 
 We use the `amt` package, but for many other packages it is the same workflow of:
 
@@ -246,7 +246,7 @@ We use the `amt` package, but for many other packages it is the same workflow of
 
 - Read the data into R (e.g., with `read.csv()` or alike)
 - If needed, parse the date and time. 
-- Creat an object, that knows your data are points in time and space. 
+- Create an object, that knows your data are points in time and space. 
 
 ::: {.callout-warning .fragment fragment-index="3"}
 ### Multiple individuals

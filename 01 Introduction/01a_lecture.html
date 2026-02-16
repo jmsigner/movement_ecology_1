@@ -12,7 +12,7 @@
   <meta name="generator" content="quarto-1.6.40">
 
   <meta name="author" content="Johannes Signer">
-  <meta name="dcterms.date" content="2026-02-12">
+  <meta name="dcterms.date" content="2026-02-16">
   <title>Introduction</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -214,7 +214,7 @@ Johannes Signer <a href="https://orcid.org/0000-0002-1771-7775" class="quarto-ti
     </div>
 </div>
 
-  <p class="date">February 12, 2026</p>
+  <p class="date">February 16, 2026</p>
 </section>
 <section>
 <section id="welcome" class="title-slide slide level1 center">
@@ -266,7 +266,7 @@ Johannes Signer <a href="https://orcid.org/0000-0002-1771-7775" class="quarto-ti
 <h3 id="day-2">Day 2</h3>
 <ol start="5" type="1">
 <li>Detecting and handling outliers (B)</li>
-<li>Home ranges concepts and tools and akde (B)</li>
+<li>Home ranges concepts and tools and aKDE (B)</li>
 <li>Handling multiple animals (J)</li>
 </ol>
 </div>
@@ -289,13 +289,13 @@ Johannes Signer <a href="https://orcid.org/0000-0002-1771-7775" class="quarto-ti
 <h2>Some logistics</h2>
 <ul>
 <li>Three days (Monday to Wednesday) from 14:00 to 18:00 Berlin time.</li>
-<li>We split these 4h block into 3 - 4 chunks, each roughly structured like this:
+<li>We split these 4-hour block into 3 - 4 chunks, each roughly structured like this:
 <ul>
 <li>Lecture ~ 30 min</li>
 <li>R walkthrough ~ 20 min</li>
 <li>Introduction of exercises ~ 5 min</li>
 </ul></li>
-<li>A 20 min break between approx. from 15:50 to 16:10.</li>
+<li>A 20 min break approx. from 15:50 to 16:10.</li>
 </ul>
 </section>
 <section class="slide level2">
@@ -303,7 +303,7 @@ Johannes Signer <a href="https://orcid.org/0000-0002-1771-7775" class="quarto-ti
 <ul>
 <li><p>Lectures will be held via zoom.</p></li>
 <li><p>During the whole workshop we have a slack channel where you ask questions (we will monitor the channel during the course, feel free to ask questions there also outside the course hours).</p></li>
-<li><p>All course material are available here: <a href="https://github.com/jmsigner/movement_ecology_1" class="uri">https://github.com/jmsigner/movement_ecology_1</a></p></li>
+<li><p>All course material is available here: <a href="https://github.com/jmsigner/movement_ecology_1" class="uri">https://github.com/jmsigner/movement_ecology_1</a></p></li>
 </ul>
 <aside class="notes">
 <p>Say that you can download the whole repo in one go or clone it.</p>
@@ -330,7 +330,7 @@ Johannes Signer <a href="https://orcid.org/0000-0002-1771-7775" class="quarto-ti
 <h1>Some conventions in R</h1>
 <ul>
 <li><code>%&gt;%</code> or <code>|&gt;</code>: Pipes the output of one function to a next function. We will discuss this further later on.</li>
-<li><code>::</code> to access a name space form a package.</li>
+<li><code>::</code> to access a namespace form a package.</li>
 <li><code>data.frame</code> or <code>tibble</code>?</li>
 </ul>
 <div class="fragment">
@@ -346,7 +346,7 @@ Johannes Signer <a href="https://orcid.org/0000-0002-1771-7775" class="quarto-ti
 </div>
 </div>
 <aside class="notes">
-<p>This means, eventhough our computers differs, relative to the project root, we all have the same directory structure.</p>
+<p>This means, even though our computers differ, relative to the project root, we all have the same directory structure.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -375,7 +375,7 @@ Johannes Signer <a href="https://orcid.org/0000-0002-1771-7775" class="quarto-ti
 </ol>
 <aside class="notes">
 <ol type="1">
-<li>Preprocessing: E.g., Global Location Sensos only provide light intensity. Brian will talk about this a bit next.</li>
+<li>Preprocessing: E.g., Global Location Sensors only provide light intensity. Brian will talk about this a bit next.</li>
 <li>We will talk about this tomorrow (-&gt; how to find locations that are unreasonable).</li>
 <li>Home ranges etc..</li>
 </ol>
@@ -395,7 +395,7 @@ Johannes Signer <a href="https://orcid.org/0000-0002-1771-7775" class="quarto-ti
 <aside class="notes">
 <ul>
 <li>First we obtain raw data, that is later being processed.</li>
-<li>Than we use tracking data and so on</li>
+<li>Then we use tracking data and so on</li>
 <li>Finally, we want to achieve something.</li>
 </ul>
 <style type="text/css">
@@ -433,16 +433,16 @@ Johannes Signer <a href="https://orcid.org/0000-0002-1771-7775" class="quarto-ti
 <ul>
 <li class="fragment">The CRS defines the reference system that is being used to explicitly reference a feature in space.</li>
 <li class="fragment">There are two classes of CRS: <strong>geographic</strong> (e.g., WGS84) and <strong>projected</strong> (e.g., UTM) CRS.</li>
-<li class="fragment">Projected CRS flatten the three dimensional data to the a two-dimensional plane (and introduce some distortion).</li>
+<li class="fragment">Projected CRS flatten three dimensional data to a two-dimensional plane (and introduce some distortion).</li>
 <li class="fragment">CRS are often referred to with their EPSG<sup>1</sup> code.</li>
-<li class="fragment">EPSG codes are four to five digits number that refer to different CRS. See for example &lt;www.epsg.io&gt;.</li>
+<li class="fragment">EPSG codes are four- to five-digits number that refer to different CRS. See for example &lt;www.epsg.io&gt;.</li>
 <li class="fragment">Which CRS is best to use? It depends on the range of the study species. I usually prefer projected CRS, because their units are meters and not degrees.</li>
 </ul>
 </div>
-<aside><ol class="aside-footnotes"><li id="fn1"><p><span class="fragment">EPSG stands for European Petrol Survey Group, who came up with the system</span></p></li></ol></aside></section>
+<aside><ol class="aside-footnotes"><li id="fn1"><p><span class="fragment">EPSG stands for European Petroleum Survey Group, who came up with the system</span></p></li></ol></aside></section>
 <section id="environmental-covariates" class="slide level2">
 <h2>Environmental covariates</h2>
-<p>In addition to movement data, we often want to annotate them with environmental data ofte as:</p>
+<p>In addition to movement data, we often want to annotate them with environmental data often as:</p>
 <ul>
 <li>Vector layers (e.g., road networks, rivers, protected areas)</li>
 <li>Raster layers (e.g., land use, remotely sensed data such as NDVI, climatic variables)</li>
@@ -469,15 +469,15 @@ Johannes Signer <a href="https://orcid.org/0000-0002-1771-7775" class="quarto-ti
 </div>
 </div>
 </section>
-<section id="reading-prepcossed-movement-data-in-r" class="slide level2">
-<h2>Reading prepcossed movement data in R</h2>
+<section id="reading-preprocessed-movement-data-in-r" class="slide level2">
+<h2>Reading preprocessed movement data in R</h2>
 <p>We use the <code>amt</code> package, but for many other packages it is the same workflow of:</p>
 <div class="columns">
 <div class="column fragment" data-fragment-index="1" style="width:49%;">
 <ul>
 <li>Read the data into R (e.g., with <code>read.csv()</code> or alike)</li>
 <li>If needed, parse the date and time.</li>
-<li>Creat an object, that knows your data are points in time and space.</li>
+<li>Create an object, that knows your data are points in time and space.</li>
 </ul>
 <div class="fragment" data-fragment-index="3">
 <div class="callout callout-warning callout-titled callout-style-default">
@@ -549,17 +549,16 @@ Johannes Signer <a href="https://orcid.org/0000-0002-1771-7775" class="quarto-ti
 
 <p>If you have gaps and/or different sampling rates, interpolation with continuous time movement models may be an option.</p>
 
-<img data-src="img/jonsen2023_mee.png" style="width:85.0%" class="r-stretch"></section></section>
-<section id="data-sets-that-we-use" class="title-slide slide level1 center">
-<h1>Data sets that we use</h1>
+<img data-src="img/jonsen2023_mee.png" style="width:85.0%" class="r-stretch"></section>
+<section id="data-sets-that-we-use" class="slide level2">
+<h2>Data sets that we use</h2>
 <ul>
 <li>We will use several data sets during this course including a data set on fishers, elephants and deer.</li>
 <li>Feel free to use your own data during the exercises, we are happy to help to get it into shape.</li>
 <li>For the R walkthrough we also simulate data.</li>
 </ul>
 
-</section>
-
+</section></section>
 
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
