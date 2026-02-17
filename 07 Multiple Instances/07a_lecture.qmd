@@ -408,7 +408,7 @@ dat |> nest(data = c(x, y))
 
 ::: {.column width = "33%" .fragment}
 
-The same, but
+The same, but saying which columns to keep: 
 
 ```{r}
 dat |> nest(data = -id)
