@@ -73,7 +73,81 @@ knitr::opts_chunk$set(
 
 - Correct interpretation of the selection coefficients can be challenging. 
 
-# SSA
+# Step Selection Analysis (SSA)
+
+## SSA
+
+- We've talked a lot about movement in this class, using the foundations of random walk models to think about animal movement.
+- We just talked about estimating habitat selection from independent samples of space use.
+- How do we put together movement and habitat selection?
+
+## SSA
+
+- Step selection analysis uses the movement process to define availability.
+- Conceptualize an animal's movement track as a combination of:
+  - Selection-free movement kernel
+  - Movement-free habitat selection kernel
+  
+<center>
+![Figure 1 from Michelot et al. (2024) MEE](img/Michelot2024_fig1.png){.lightbox}\
+</center>
+
+## SSA
+
+- We can use SSA to make **inference** about just habitat selection, while accounting for movement.
+
+![Selection for Elevation by the fisher "Lupe"](img/fisher_elevation.png){width="70%" .lightbox}
+
+## SSA
+
+- We can use SSA to make **inference** about just movement, while accounting for habitat.
+
+:::: {.columns}
+
+::: {.column}
+![Step length distribution for categorical land cover](img/updated_sl_cat.png)
+:::
+
+::: {.column}
+![Step length distribution for continuous habitat](img/updated_sl_cont.png)
+:::
+
+::::
+
+## SSA
+
+- We can use SSA to make **inference** about both movement and habitat selection.
+
+<center>
+![Figure 1 from Dickie et al. (2019) JAnE](img/dickie_etal_fig1.png){width="50%" .lightbox}
+</center>
+
+
+## SSA
+
+- We can use SSA for **prediction** by simulating from a fitted model.
+- A step selection function (SSF) is actually a biased, correlated random walk (BCRW).
+
+<center>
+![Figure 1 from Hofmann et al. (2023) Landsc Ecol](img/Hofmann2024_fig1.png){.lightbox}
+</center>
+
+## SSA
+
+- We can use SSA for **prediction** by simulating from a fitted model.
+- A step selection function (SSF) is actually a biased, correlated random walk (BCRW).
+
+<center>
+![Figure 4 from Hofmann et al. (2023) Landsc Ecol](img/Hofmann2024_fig4.png){width="40%" .lightbox}
+</center>
+
+## SSA
+
+- We can include complex, non-linear terms in SSA for **inference** or **prediction**.
+
+<center>
+![Figure 1 from Klappstein et al. (2024) MEE](img/Klappstein_fig1.jpg){width="40%" .lightbox}
+</center>
 
 # HMM
 
@@ -100,3 +174,191 @@ knitr::opts_chunk$set(
 - `moveHMM`, `momentuHMM` and more recently `hmmTMB`. 
 
 # Migration Mapping
+
+## Migration Mapping
+
+- Migration is an ecologically important phenomenon seen across almost all taxa of animals.
+- Migration maps are a highly requested resource by managers.
+- Migration mapping involves answering these three questions:
+  - What is migration?
+  - How do we identify migration among other types of behavior?
+  - How do we delimit the space around a migration path?
+  
+## Migration Mapping
+
+:::: {.columns}
+
+::: {.column width="60%"}
+
+- What is migration?
+  - Directional movement to take advantage of spatially distributed resources?
+  - Back-and-forth movement between two seasonal ranges?
+    - To reach different resources and conditions?
+    - To maintain the same resources and conditions?
+  - Change in movement and habitat selection parameters?
+
+:::
+
+
+::: {.column width="10%"}
+
+:::
+
+::: {.column width="30%"}
+
+![Dingle 2014 Cover](img/Dingle2014.jpg){width="100%" .lightbox}\
+
+:::
+
+::::
+
+## Migration Mapping
+
+:::: {.columns}
+
+::: {.column width="60%"}
+
+
+- What is migration?
+</br>
+
+
+![Figure 1 from Cagnacci et al. (2016) JAnE](img/cagnacci2016_fig1.png){.lightbox}
+
+
+:::
+
+::: {.column width="40%"}
+
+![Cagnacci et al. (2016) JAnE](img/cagnacci2016.png){.lightbox}\
+
+:::
+
+::::
+
+## Migration Mapping
+
+- How do we identify migration among other types of behavior?
+
+<center>
+
+![HMM](img/florko_hmm_2025.png){.lightbox}\
+
+</center>
+
+## Migration Mapping
+
+- How do we identify migration among other types of behavior?
+
+<center>
+
+![Gurarie et al. (2016) JAnE](img/gurarie2016.png)\
+
+</center>
+
+## Migration Mapping
+
+- How do we identify migration among other types of behavior?
+
+<center>
+
+![Cagnacci et al. (2016) JAnE](img/cagnacci2016.png)\
+
+</center>
+
+## Migration Mapping
+
+- How do we identify migration among other types of behavior?
+
+<center>
+
+![Gurarie et al. (2016) JAnE](img/gurarie2017.png)\
+
+</center>
+
+## Migration Mapping
+
+- How do we delimit the space around a migration path?
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-width: 7
+
+data.frame(x = c(1, 5, 9),
+           y = c(1, 3, 2)) %>% 
+  ggplot(aes(x = x, y = y)) +
+  geom_line() +
+  geom_point(size = 10) +
+  coord_equal(ylim = c(0, 4)) +
+  theme_minimal() +
+  theme(panel.grid = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank())
+
+```
+
+## Migration Mapping
+
+- How do we delimit the space around a migration path?
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-width: 7
+
+data.frame(x = c(1, 5, 9),
+           y = c(1, 3, 2)) %>%
+  mutate(max = y + 0.5,
+         min = y - 0.5) %>% 
+  ggplot(aes(x = x, y = y, ymin = min, ymax = max)) +
+  geom_ribbon(fill = "gray") +
+  geom_line() +
+  geom_point(size = 10) +
+  coord_equal(ylim = c(0, 4)) +
+  theme_minimal() +
+  theme(panel.grid = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank())
+
+```
+
+## Migration Mapping
+
+- How do we delimit the space around a migration path?
+
+<center>
+
+![Merkle et al. (2023) JApE](img/merkle2023.png)\
+
+</center>
+
+## Migration Mapping
+
+- How do we delimit the space around a migration path?
+
+<center>
+
+![Figure 1 from Merkle et al. (2023) JApE](img/merkle2023_fig1.png){width="40%" .lightbox}
+
+</center>
+
+## Migration Mapping
+
+- How do we delimit the space around a migration path?
+
+<center>
+
+![Figure 3 from Merkle et al. (2023) JApE](img/merkle2023_fig3.png){width="80%" .lightbox}
+
+</center>
+
+## Migration Mapping
+
+- How do we delimit the space around a migration path?
+
+<center>
+
+![Figure 1 from Hofmann et al. (2023) Landsc Ecol](img/Hofmann2024_fig1.png){width="100%" .lightbox}
+
+</center>

@@ -6,14 +6,17 @@
 <script src="10a_lecture_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="10a_lecture_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="10a_lecture_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="10a_lecture_files/libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="10a_lecture_files/libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="10a_lecture_files/libs/quarto-contrib/quarto-timer-1.0.0/timer.js"></script>
-<link href="10a_lecture_files/libs/quarto-contrib/quarto-timer-1.0.0/timer.css" rel="stylesheet"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.6.40">
+<link href="10a_lecture_files/libs/quarto-contrib/quarto-timer-1.0.0/timer.css" rel="stylesheet">
+<script src="10a_lecture_files/libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="10a_lecture_files/libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="10a_lecture_files/libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.8.27">
 
   <meta name="author" content="Brian J. Smith">
   <meta name="author" content="Johannes Signer">
-  <meta name="dcterms.date" content="2026-02-16">
+  <meta name="dcterms.date" content="2026-02-17">
   <title>Outlook</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -33,7 +36,7 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="10a_lecture_files/libs/revealjs/dist/theme/quarto-79de7379233449a958139d6a18b1afaf.css">
+  <link rel="stylesheet" href="10a_lecture_files/libs/revealjs/dist/theme/quarto-5ae9c59b2727fcd5357d4f034d95f9e0.css">
   <link href="10a_lecture_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="10a_lecture_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="10a_lecture_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -161,7 +164,7 @@ Johannes Signer <a href="https://orcid.org/0000-0002-1771-7775" class="quarto-ti
     </div>
 </div>
 
-  <p class="date">February 16, 2026</p>
+  <p class="date">February 17, 2026</p>
 </section>
 <section>
 <section id="habitat-selection-resourcehabitat-selection-analysis-rhsa" class="title-slide slide level1 center">
@@ -194,11 +197,126 @@ Johannes Signer <a href="https://orcid.org/0000-0002-1771-7775" class="quarto-ti
 <li>Correct interpretation of the selection coefficients can be challenging.</li>
 </ul>
 </section></section>
-<section id="ssa" class="title-slide slide level1 center">
-<h1>SSA</h1>
+<section>
+<section id="step-selection-analysis-ssa" class="title-slide slide level1 center">
+<h1>Step Selection Analysis (SSA)</h1>
 
 </section>
+<section id="ssa" class="slide level2">
+<h2>SSA</h2>
+<ul>
+<li>We’ve talked a lot about movement in this class, using the foundations of random walk models to think about animal movement.</li>
+<li>We just talked about estimating habitat selection from independent samples of space use.</li>
+<li>How do we put together movement and habitat selection?</li>
+</ul>
+</section>
+<section id="ssa-1" class="slide level2">
+<h2>SSA</h2>
+<ul>
+<li>Step selection analysis uses the movement process to define availability.</li>
+<li>Conceptualize an animal’s movement track as a combination of:
+<ul>
+<li>Selection-free movement kernel</li>
+<li>Movement-free habitat selection kernel</li>
+</ul></li>
+</ul>
+<center>
+<a href="img/Michelot2024_fig1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure 1 from Michelot et al.&nbsp;(2024) MEE"><img data-src="img/Michelot2024_fig1.png" alt="Figure 1 from Michelot et al.&nbsp;(2024) MEE"></a><br>
 
+</center>
+</section>
+<section id="ssa-2" class="slide level2">
+<h2>SSA</h2>
+<ul>
+<li>We can use SSA to make <strong>inference</strong> about just habitat selection, while accounting for movement.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="img/fisher_elevation.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Selection for Elevation by the fisher “Lupe”"><img data-src="img/fisher_elevation.png" style="width:70.0%" alt="Selection for Elevation by the fisher “Lupe”"></a></p>
+<figcaption>Selection for Elevation by the fisher “Lupe”</figcaption>
+</figure>
+</div>
+</section>
+<section id="ssa-3" class="slide level2">
+<h2>SSA</h2>
+<ul>
+<li>We can use SSA to make <strong>inference</strong> about just movement, while accounting for habitat.</li>
+</ul>
+<div class="columns">
+<div class="column">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="img/updated_sl_cat.png"></p>
+<figcaption>Step length distribution for categorical land cover</figcaption>
+</figure>
+</div>
+</div><div class="column">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="img/updated_sl_cont.png"></p>
+<figcaption>Step length distribution for continuous habitat</figcaption>
+</figure>
+</div>
+</div></div>
+</section>
+<section id="ssa-4" class="slide level2">
+<h2>SSA</h2>
+<ul>
+<li>We can use SSA to make <strong>inference</strong> about both movement and habitat selection.</li>
+</ul>
+<center>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="img/dickie_etal_fig1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure 1 from Dickie et al.&nbsp;(2019) JAnE"><img data-src="img/dickie_etal_fig1.png" style="width:50.0%" alt="Figure 1 from Dickie et al.&nbsp;(2019) JAnE"></a></p>
+<figcaption>Figure 1 from Dickie et al.&nbsp;(2019) JAnE</figcaption>
+</figure>
+</div>
+</center>
+</section>
+<section id="ssa-5" class="slide level2">
+<h2>SSA</h2>
+<ul>
+<li>We can use SSA for <strong>prediction</strong> by simulating from a fitted model.</li>
+<li>A step selection function (SSF) is actually a biased, correlated random walk (BCRW).</li>
+</ul>
+<center>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="img/Hofmann2024_fig1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure 1 from Hofmann et al.&nbsp;(2023) Landsc Ecol"><img data-src="img/Hofmann2024_fig1.png" alt="Figure 1 from Hofmann et al.&nbsp;(2023) Landsc Ecol"></a></p>
+<figcaption>Figure 1 from Hofmann et al.&nbsp;(2023) Landsc Ecol</figcaption>
+</figure>
+</div>
+</center>
+</section>
+<section id="ssa-6" class="slide level2">
+<h2>SSA</h2>
+<ul>
+<li>We can use SSA for <strong>prediction</strong> by simulating from a fitted model.</li>
+<li>A step selection function (SSF) is actually a biased, correlated random walk (BCRW).</li>
+</ul>
+<center>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="img/Hofmann2024_fig4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure 4 from Hofmann et al.&nbsp;(2023) Landsc Ecol"><img data-src="img/Hofmann2024_fig4.png" style="width:40.0%" alt="Figure 4 from Hofmann et al.&nbsp;(2023) Landsc Ecol"></a></p>
+<figcaption>Figure 4 from Hofmann et al.&nbsp;(2023) Landsc Ecol</figcaption>
+</figure>
+</div>
+</center>
+</section>
+<section id="ssa-7" class="slide level2">
+<h2>SSA</h2>
+<ul>
+<li>We can include complex, non-linear terms in SSA for <strong>inference</strong> or <strong>prediction</strong>.</li>
+</ul>
+<center>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="img/Klappstein_fig1.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure 1 from Klappstein et al.&nbsp;(2024) MEE"><img data-src="img/Klappstein_fig1.jpg" style="width:40.0%" alt="Figure 1 from Klappstein et al.&nbsp;(2024) MEE"></a></p>
+<figcaption>Figure 1 from Klappstein et al.&nbsp;(2024) MEE</figcaption>
+</figure>
+</div>
+</center>
+</section></section>
 <section>
 <section id="hmm" class="title-slide slide level1 center">
 <h1>HMM</h1>
@@ -222,10 +340,172 @@ Johannes Signer <a href="https://orcid.org/0000-0002-1771-7775" class="quarto-ti
 <li><code>moveHMM</code>, <code>momentuHMM</code> and more recently <code>hmmTMB</code>.</li>
 </ul>
 </section></section>
+<section>
 <section id="migration-mapping" class="title-slide slide level1 center">
 <h1>Migration Mapping</h1>
 
 </section>
+<section id="migration-mapping-1" class="slide level2">
+<h2>Migration Mapping</h2>
+<ul>
+<li>Migration is an ecologically important phenomenon seen across almost all taxa of animals.</li>
+<li>Migration maps are a highly requested resource by managers.</li>
+<li>Migration mapping involves answering these three questions:
+<ul>
+<li>What is migration?</li>
+<li>How do we identify migration among other types of behavior?</li>
+<li>How do we delimit the space around a migration path?</li>
+</ul></li>
+</ul>
+</section>
+<section id="migration-mapping-2" class="slide level2">
+<h2>Migration Mapping</h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<ul>
+<li>What is migration?
+<ul>
+<li>Directional movement to take advantage of spatially distributed resources?</li>
+<li>Back-and-forth movement between two seasonal ranges?
+<ul>
+<li>To reach different resources and conditions?</li>
+<li>To maintain the same resources and conditions?</li>
+</ul></li>
+<li>Change in movement and habitat selection parameters?</li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:10%;">
+
+</div><div class="column" style="width:30%;">
+<p><a href="img/Dingle2014.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Dingle 2014 Cover"><img data-src="img/Dingle2014.jpg" style="width:100.0%" alt="Dingle 2014 Cover"></a><br>
+</p>
+</div></div>
+</section>
+<section id="migration-mapping-3" class="slide level2">
+<h2>Migration Mapping</h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<ul>
+<li>What is migration? <br></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="img/cagnacci2016_fig1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure 1 from Cagnacci et al.&nbsp;(2016) JAnE"><img data-src="img/cagnacci2016_fig1.png" alt="Figure 1 from Cagnacci et al.&nbsp;(2016) JAnE"></a></p>
+<figcaption>Figure 1 from Cagnacci et al.&nbsp;(2016) JAnE</figcaption>
+</figure>
+</div>
+</div><div class="column" style="width:40%;">
+<p><a href="img/cagnacci2016.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Cagnacci et al.&nbsp;(2016) JAnE"><img data-src="img/cagnacci2016.png" alt="Cagnacci et al.&nbsp;(2016) JAnE"></a><br>
+</p>
+</div></div>
+</section>
+<section id="migration-mapping-4" class="slide level2">
+<h2>Migration Mapping</h2>
+<ul>
+<li>How do we identify migration among other types of behavior?</li>
+</ul>
+<center>
+<p><a href="img/florko_hmm_2025.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="HMM"><img data-src="img/florko_hmm_2025.png" alt="HMM"></a><br>
+</p>
+</center>
+</section>
+<section id="migration-mapping-5" class="slide level2">
+<h2>Migration Mapping</h2>
+<ul>
+<li>How do we identify migration among other types of behavior?</li>
+</ul>
+<center>
+<p><img data-src="img/gurarie2016.png" alt="Gurarie et al.&nbsp;(2016) JAnE"><br>
+</p>
+</center>
+</section>
+<section id="migration-mapping-6" class="slide level2">
+<h2>Migration Mapping</h2>
+<ul>
+<li>How do we identify migration among other types of behavior?</li>
+</ul>
+<center>
+<p><img data-src="img/cagnacci2016.png" alt="Cagnacci et al.&nbsp;(2016) JAnE"><br>
+</p>
+</center>
+</section>
+<section id="migration-mapping-7" class="slide level2">
+<h2>Migration Mapping</h2>
+<ul>
+<li>How do we identify migration among other types of behavior?</li>
+</ul>
+<center>
+<p><img data-src="img/gurarie2017.png" alt="Gurarie et al.&nbsp;(2016) JAnE"><br>
+</p>
+</center>
+</section>
+<section id="migration-mapping-8" class="slide level2">
+<h2>Migration Mapping</h2>
+<ul>
+<li>How do we delimit the space around a migration path?</li>
+</ul>
+
+<img data-src="10a_lecture_files/figure-revealjs/unnamed-chunk-1-1.png" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
+<section id="migration-mapping-9" class="slide level2">
+<h2>Migration Mapping</h2>
+<ul>
+<li>How do we delimit the space around a migration path?</li>
+</ul>
+
+<img data-src="10a_lecture_files/figure-revealjs/unnamed-chunk-2-1.png" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
+<section id="migration-mapping-10" class="slide level2">
+<h2>Migration Mapping</h2>
+<ul>
+<li>How do we delimit the space around a migration path?</li>
+</ul>
+<center>
+<p><img data-src="img/merkle2023.png" alt="Merkle et al.&nbsp;(2023) JApE"><br>
+</p>
+</center>
+</section>
+<section id="migration-mapping-11" class="slide level2">
+<h2>Migration Mapping</h2>
+<ul>
+<li>How do we delimit the space around a migration path?</li>
+</ul>
+<center>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="img/merkle2023_fig1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Figure 1 from Merkle et al.&nbsp;(2023) JApE"><img data-src="img/merkle2023_fig1.png" style="width:40.0%" alt="Figure 1 from Merkle et al.&nbsp;(2023) JApE"></a></p>
+<figcaption>Figure 1 from Merkle et al.&nbsp;(2023) JApE</figcaption>
+</figure>
+</div>
+</center>
+</section>
+<section id="migration-mapping-12" class="slide level2">
+<h2>Migration Mapping</h2>
+<ul>
+<li>How do we delimit the space around a migration path?</li>
+</ul>
+<center>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="img/merkle2023_fig3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="Figure 3 from Merkle et al.&nbsp;(2023) JApE"><img data-src="img/merkle2023_fig3.png" style="width:80.0%" alt="Figure 3 from Merkle et al.&nbsp;(2023) JApE"></a></p>
+<figcaption>Figure 3 from Merkle et al.&nbsp;(2023) JApE</figcaption>
+</figure>
+</div>
+</center>
+</section>
+<section id="migration-mapping-13" class="slide level2">
+<h2>Migration Mapping</h2>
+<ul>
+<li>How do we delimit the space around a migration path?</li>
+</ul>
+<center>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="img/Hofmann2024_fig1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure 1 from Hofmann et al.&nbsp;(2023) Landsc Ecol"><img data-src="img/Hofmann2024_fig1.png" style="width:100.0%" alt="Figure 1 from Hofmann et al.&nbsp;(2023) Landsc Ecol"></a></p>
+<figcaption>Figure 1 from Hofmann et al.&nbsp;(2023) Landsc Ecol</figcaption>
+</figure>
+</div>
+</center>
+
+</section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
@@ -443,228 +723,281 @@ Johannes Signer <a href="https://orcid.org/0000-0002-1771-7775" class="quarto-ti
       });
     </script>
     
+
     <script>
+
       // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
       // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
       // slide changes (different for each slide format).
+
       (function () {
+
         // dispatch for htmlwidgets
+
         function fireSlideEnter() {
+
           const event = window.document.createEvent("Event");
+
           event.initEvent("slideenter", true, true);
+
           window.document.dispatchEvent(event);
+
         }
+
+    
 
         function fireSlideChanged(previousSlide, currentSlide) {
+
           fireSlideEnter();
 
+    
+
           // dispatch for shiny
+
           if (window.jQuery) {
+
             if (previousSlide) {
+
               window.jQuery(previousSlide).trigger("hidden");
+
             }
+
             if (currentSlide) {
+
               window.jQuery(currentSlide).trigger("shown");
+
             }
+
           }
+
         }
+
+    
 
         // hookup for slidy
+
         if (window.w3c_slidy) {
+
           window.w3c_slidy.add_observer(function (slide_num) {
+
             // slide_num starts at position 1
+
             fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
           });
+
         }
+
+    
 
       })();
+
     </script>
 
+    
+
     <script id="quarto-html-after-body" type="application/javascript">
-    window.document.addEventListener("DOMContentLoaded", function (event) {
-      const toggleBodyColorMode = (bsSheetEl) => {
-        const mode = bsSheetEl.getAttribute("data-mode");
-        const bodyEl = window.document.querySelector("body");
-        if (mode === "dark") {
-          bodyEl.classList.add("quarto-dark");
-          bodyEl.classList.remove("quarto-light");
-        } else {
-          bodyEl.classList.add("quarto-light");
-          bodyEl.classList.remove("quarto-dark");
-        }
-      }
-      const toggleBodyColorPrimary = () => {
-        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-        if (bsSheetEl) {
-          toggleBodyColorMode(bsSheetEl);
-        }
-      }
-      toggleBodyColorPrimary();  
-      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
-      tabsets.forEach(function(tabset) {
-        const tabby = new Tabby('#' + tabset.id);
-      });
-      const isCodeAnnotation = (el) => {
-        for (const clz of el.classList) {
-          if (clz.startsWith('code-annotation-')) {                     
-            return true;
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
           }
+          return false;
         }
-        return false;
-      }
-      const onCopySuccess = function(e) {
-        // button target
-        const button = e.trigger;
-        // don't keep focus
-        button.blur();
-        // flash "checked"
-        button.classList.add('code-copy-button-checked');
-        var currentTitle = button.getAttribute("title");
-        button.setAttribute("title", "Copied!");
-        let tooltip;
-        if (window.bootstrap) {
-          button.setAttribute("data-bs-toggle", "tooltip");
-          button.setAttribute("data-bs-placement", "left");
-          button.setAttribute("data-bs-title", "Copied!");
-          tooltip = new bootstrap.Tooltip(button, 
-            { trigger: "manual", 
-              customClass: "code-copy-button-tooltip",
-              offset: [0, -8]});
-          tooltip.show();    
-        }
-        setTimeout(function() {
-          if (tooltip) {
-            tooltip.hide();
-            button.removeAttribute("data-bs-title");
-            button.removeAttribute("data-bs-toggle");
-            button.removeAttribute("data-bs-placement");
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
           }
-          button.setAttribute("title", currentTitle);
-          button.classList.remove('code-copy-button-checked');
-        }, 1000);
-        // clear code selection
-        e.clearSelection();
-      }
-      const getTextToCopy = function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
           for (const childEl of codeEl.children) {
             if (isCodeAnnotation(childEl)) {
               childEl.remove();
             }
           }
           return codeEl.innerText;
-      }
-      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-        text: getTextToCopy
-      });
-      clipboard.on('success', onCopySuccess);
-      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-          text: getTextToCopy,
-          container: window.document.getElementById('quarto-embedded-source-code-modal')
-        });
-        clipboardModal.on('success', onCopySuccess);
-      }
-        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-        var mailtoRegex = new RegExp(/^mailto:/);
-          var filterRegex = new RegExp('/' + window.location.host + '/');
-        var isInternal = (href) => {
-            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
         }
-        // Inspect non-navigation links and adorn them if external
-     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-        for (var i=0; i<links.length; i++) {
-          const link = links[i];
-          if (!isInternal(link.href)) {
-            // undo the damage that might have been done by quarto-nav.js in the case of
-            // links that we want to consider external
-            if (link.dataset.originalHref !== undefined) {
-              link.href = link.dataset.originalHref;
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
             }
           }
-        }
-      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-        const config = {
-          allowHTML: true,
-          maxWidth: 500,
-          delay: 100,
-          arrow: false,
-          appendTo: function(el) {
-              return el.closest('section.slide') || el.parentElement;
-          },
-          interactive: true,
-          interactiveBorder: 10,
-          theme: 'light-border',
-          placement: 'bottom-start',
-        };
-        if (contentFn) {
-          config.content = contentFn;
-        }
-        if (onTriggerFn) {
-          config.onTrigger = onTriggerFn;
-        }
-        if (onUntriggerFn) {
-          config.onUntrigger = onUntriggerFn;
-        }
-          config['offset'] = [0,0];
-          config['maxWidth'] = 700;
-        window.tippy(el, config); 
-      }
-      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-      for (var i=0; i<noterefs.length; i++) {
-        const ref = noterefs[i];
-        tippyHover(ref, function() {
-          // use id or data attribute instead here
-          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-          try { href = new URL(href).hash; } catch {}
-          const id = href.replace(/^#\/?/, "");
-          const note = window.document.getElementById(id);
-          if (note) {
-            return note.innerHTML;
-          } else {
-            return "";
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
           }
-        });
-      }
-      const findCites = (el) => {
-        const parentEl = el.parentElement;
-        if (parentEl) {
-          const cites = parentEl.dataset.cites;
-          if (cites) {
-            return {
-              el,
-              cites: cites.split(' ')
-            };
-          } else {
-            return findCites(el.parentElement)
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
           }
-        } else {
-          return undefined;
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
         }
-      };
-      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-      for (var i=0; i<bibliorefs.length; i++) {
-        const ref = bibliorefs[i];
-        const citeInfo = findCites(ref);
-        if (citeInfo) {
-          tippyHover(citeInfo.el, function() {
-            var popup = window.document.createElement('div');
-            citeInfo.cites.forEach(function(cite) {
-              var citeDiv = window.document.createElement('div');
-              citeDiv.classList.add('hanging-indent');
-              citeDiv.classList.add('csl-entry');
-              var biblioDiv = window.document.getElementById('ref-' + cite);
-              if (biblioDiv) {
-                citeDiv.innerHTML = biblioDiv.innerHTML;
-              }
-              popup.appendChild(citeDiv);
-            });
-            return popup.innerHTML;
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
           });
         }
-      }
-    });
-    </script>
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    <script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+    (function() {
+      let previousOnload = window.onload;
+      window.onload = () => {
+        if (previousOnload) {
+          previousOnload();
+        }
+        lightboxQuarto.on('slide_before_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          const href = trigger.getAttribute('href');
+          if (href !== null) {
+            const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+            if (imgEl !== null) {
+              const srcAttr = imgEl.getAttribute("src");
+              if (srcAttr && srcAttr.startsWith("data:")) {
+                slideConfig.href = srcAttr;
+              }
+            }
+          } 
+        });
+      
+        lightboxQuarto.on('slide_after_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(slideNode);
+          }
+        });
+      
+      };
+      
+    })();
+              </script>
     
 
 </body></html>
