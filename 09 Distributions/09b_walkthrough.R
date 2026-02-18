@@ -34,7 +34,7 @@ summarize_sampling_rate(trk)
 # ... and resample to 1.5h
 trk1 <- trk |> track_resample(rate = minutes(90), tolerance = minutes(10))
 
-table(trk$burst_)
+table(trk1$burst_)
 
 # We want to change the projection form geographic coordinates to UTM,
 # see here: https://stackoverflow.com/questions/9186496/determining-utm-zone-to-convert-from-longitude-latitude
@@ -44,11 +44,17 @@ lon <- -93
 
 # Northern Hemisphere: 326 + zone
 # here: 32515
-trk1 <- trk1 |> transform_coords(32515)
+trk1 <- trk1 |> transform_coords(32615)
 
 # Create steps and annotate with time of day
 steps <- trk1 |> steps_by_burst() |> # Steps
   time_of_day(where = "both") # Add time of day
+head(steps)
+
+table(steps$tod_end_)
+table(steps$tod_start_)
+
+steps
 
 # Look at distribution of step lengths
 steps |>
@@ -70,10 +76,14 @@ day <- fit_distr(
   "gamma"
 )
 
+day
+
 night <- fit_distr(
   steps |> filter(tod_start_ == "night") |> pull(sl_),
   "gamma"
 )
+
+night
 
 day$params
 night$params
@@ -88,8 +98,9 @@ res <- tibble(
       night$vcov["scale", "scale"], night$vcov["shape", "shape"]))
 )
 
+res
 
-td <- res |> nest(-when) |>
+td <- res |> nest(data = -when) |>
   mutate(gamma = map(data, ~ {
     tibble(
       x = seq(1, 5000, len = 250),
@@ -106,9 +117,8 @@ steps |>
   geom_line(aes(x = x, y = y), data = td, col = "red") +
   facet_wrap(~ tod_start_, scale = "free")
 
-
 # ... Derived quantities ----
-# Expected speed
+# Expected displacement
 # day
 res |> filter(when == "day") |> pull(est) |> prod()
 res |> filter(when == "night") |> pull(est) |> prod()
