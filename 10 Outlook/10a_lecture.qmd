@@ -52,14 +52,36 @@ knitr::opts_chunk$set(
 
 ::: {.column width="50%"}
 
+- Resource Selection Analysis (RSA) and Habitat Selection Analysis (HSA) often refer to the same thing. 
+- Both fit a selection function (RSF or HSF) to used an available locations.
+- This can be done at different scales.
+
 :::
 
-::: {.column width="50%"}
+::: {.column width="50%" .fragment}
 
-![](img/florko_rsf_2025.png)
+![Figure 1 from DeCesare et al. (2012) EcolAppl](img/decesare_et_al_2012_scales.jpg){width="100%" .lightbox}
+
 :::
 
 ::::
+
+
+## At the home-range scale (3rd order selection)
+
+<div style="font-size: 0.9em;">
+
+- Define what is available to the animal:
+  - This is often the home range (sometimes with some buffer)
+- Extract covariate values at available and used (that where we observed the animal) points
+- Estimate selection coefficients
+
+</div>
+
+:::{.fragment}
+![Figure 1 from Floroko et al. 2025](img/florko_rsf_2025.png){width="75%" .lightbox}
+
+:::
 
 ## A typical use case
 
@@ -72,6 +94,13 @@ knitr::opts_chunk$set(
 ## Challenges
 
 - Correct interpretation of the selection coefficients can be challenging. 
+
+![Figure 1 from Avgar et al. 2017 EcoEvol](img/avgar2017logrss.jpg){width="75%"}
+
+
+<span style="font-size: 0.6em;">
+Elevation at $x_2$ = 500; dashed line is meadow and dotted line is forest.
+</span>
 
 # Step Selection Analysis (SSA)
 
@@ -149,7 +178,7 @@ knitr::opts_chunk$set(
 ![Figure 1 from Klappstein et al. (2024) MEE](img/Klappstein_fig1.jpg){width="40%" .lightbox}
 </center>
 
-# HMM
+# Hidden Markov Models
 
 ## What is it about
 
@@ -157,9 +186,17 @@ knitr::opts_chunk$set(
 
 ::: {.column width="50%"}
 
+- A hidden Markov Model can be thought of as a state-switching correlated random walk.
+- The states are latent (=hidden) and not directly observable. 
+- Typical examples are different behavioral states, for example the animal is resting or foraging. 
+
+::: {.fragment}
+- This is very similar to the white tail deer example, just that we do not know the states. 
 :::
 
-::: {.column width="50%"}
+:::
+
+::: {.column width="50%" .fragment}
 
 ![](img/florko_hmm_2025.png)
 
@@ -169,9 +206,33 @@ knitr::opts_chunk$set(
 
 ## A typical use case
 
+An example from McClintock and Michelot 2018, that they used to introduce the `momentuHMM` package. They analysed movement data of one African elephat. 
+
+:::: {.columns .fragment}
+
+::: {.column width="60%"}
+### State distribution
+
+![](img/mcclintock1.png){}
+
+:::
+
+::: {.column width="40%" .fragment}
+
+### Transistion probabilities
+
+![](img/mcclintock2_tp.png)
+
+:::
+
+::::
+
 ## What tools do you need
 
-- `moveHMM`, `momentuHMM` and more recently `hmmTMB`. 
+- `moveHMM`: Very much tailored towards movement data (with steps and turns). 
+- `momentuHMM`: Allows additional data streams, such as dives.
+- `hmmTMB`: more flexible to fit all kind of data and also allows adding splines. 
+
 
 # Migration Mapping
 
