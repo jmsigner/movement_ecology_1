@@ -59,16 +59,28 @@ Note, `dnorm()` is a built-in function for the normal density function.
 
 ---
 
+:::: {.columns}
+
+::: {.column width="70%"}
 - The normal distribution is very widely used in statistics, however, it is not useful to characterize step lengths and turn angles of animals, because values can range from $-\infty$ to $\infty$.
 
 **Think-pair-share:** what properties do distributions need to have, in order to describe animal movement?
 
-::: {.fragment}
 
+::: {.fragment}
 - For step lengths we need a distribution with a support of positive values. 
 - For turn angles we need a wrapped distribution. 
+:::
 
 :::
+
+::: {.column width="30%"}
+
+:::{.timer #timer-1 seconds=180 starton=interaction}
+:::
+:::
+
+::::
 
 
 ## Distributions for step lengths
@@ -159,7 +171,7 @@ MLE chooses the parameter values that make the observed data most plausible.
 
 :::{.callout-note .fragment}
 ### In a nutshell
-Find the distribution that best matches the data.
+Find the parameters of a distribution that best matches the data.
 :::
 
 ## MLE for Step Lengths and Turn Angles
