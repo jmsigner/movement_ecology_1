@@ -12,8 +12,6 @@ library(ggraph)
 
 leroy <- amt_fisher |> filter(name == "Leroy")
 lupe <- amt_fisher |> filter(name == "Lupe")
-leroy <- amt_fisher |> filter(name == "Leroy")
-lupe <- amt_fisher |> filter(name == "Lupe")
 
 # Create a template raster for the KDE
 
@@ -27,7 +25,9 @@ hr_lupe <- hr_kde(lupe, trast = trast, levels = c(0.5, 0.9))
 hr_overlap(hr_leroy, hr_lupe, type = "hr")
 hr_overlap(hr_lupe, hr_leroy, type = "hr")
 
-# By default `conditional = FALSE` and the full UD is used.
+# ADD plot
+
+# By default `conditional = TRUE` and the full UD is used.
 
 hr_overlap(hr_leroy, hr_lupe, type = "phr", conditional = FALSE)
 hr_overlap(hr_lupe, hr_leroy, type = "phr", conditional = FALSE)
@@ -41,7 +41,7 @@ hr_overlap(hr_lupe, hr_leroy, type = "phr", conditional = TRUE)
 # Note, for the remaining overlap measures the order does not matter. Below
 # we show this for the volumnic intersection (`type = "vi"`) as an example.
 
-hr_overlap(hr_lupe, hr_leroy, type = "vi", conditional = FALSE)
+hr_overlap(hr_lupe, hr_leroy, type = "vi", conditional = TRUE)
 hr_overlap(hr_leroy, hr_lupe, type = "vi", conditional = FALSE)
 
 ### $> 2$ instances
@@ -78,19 +78,16 @@ hr_overlap(dat$kde, type = "vi", labels = dat$week, which = "all", conditional =
 hr_overlap(dat$kde, type = "vi", labels = dat$week, which = "one_to_all")
 hr_overlap(dat$kde, type = "vi", labels = dat$week, which = "one_to_all", conditional = TRUE)
 
-# Finally, we can calculate the overlap between all elements inside a list
-# (use `which = "all"` for this). We will use the `puechcir` from the `adehabitatLT` package to illustrate this.
-
-
+# Several animals
 trast <- make_trast(amt_fisher, res = 100)
 dat1 <- amt_fisher |> nest(data = -name) |>
   mutate(kde = map(data, ~ hr_kde(., trast = trast, level = c(0.5, 0.9, 0.99))))
 
 
 # Now we can calculate the overlaps between animals:
-
 ov2 <- hr_overlap(dat1$kde, type = "hr", labels = dat1$name, which = "all",
                   conditional = TRUE)
+
 graph <- as_tbl_graph(ov2) |>
   mutate(Popularity = centrality_degree(mode = 'in'))
 
@@ -144,8 +141,11 @@ hr_overlap_feature(hr, poly1, direction = "feature_with_hr")
 
 
 # The same work with several home-range levels:
-
 hr <- hr_mcp(lupe, levels = c(0.5, 0.9, 0.95))
 hr_overlap_feature(hr, poly, direction = "hr_with_feature")
+
+# Read and write shape files
+# sf::st_write()
+# np <- sf::st_read("")
 
 

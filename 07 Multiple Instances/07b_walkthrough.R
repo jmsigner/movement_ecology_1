@@ -218,7 +218,7 @@ map_dbl(dat1$hr.mcp[1:5], ~ hr_area(.x)$area) # This is a vector
 dat1 <- dat1 |> mutate(area.mcp = map_dbl(hr.mcp, ~ hr_area(.x)$area))
 dat1
 
-dat1 |> select(-data, -hr.mcp)
+dat1 |> dplyr::select(-data, -hr.mcp)
 
 
 # Do the number of relocations matter? ----
